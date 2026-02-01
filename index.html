@@ -1700,7 +1700,7 @@
                 setChangePasswordError('');
             };
 
-            const handleChangePassword = (e) => {
+            const handleChangePassword = async (e) => {
                 e.preventDefault();
                 
                 // Validar senha de administrador
@@ -1722,10 +1722,25 @@
                     return;
                 }
                 
-                // Alterar senha
+                // Salvar senha no Firebase
+                try {
+                    if (db) {
+                        await db.collection('guilda').doc('config').set({
+                            senhaAcesso: newAccessPassword,
+                            updatedAt: new Date().toISOString()
+                        });
+                        console.log('✅ Senha salva no Firebase');
+                    }
+                } catch (error) {
+                    console.error('Erro ao salvar senha:', error);
+                    setChangePasswordError('❌ Erro ao salvar no servidor. Tente novamente.');
+                    return;
+                }
+                
+                // Alterar senha localmente
                 setSenhaAcesso(newAccessPassword);
                 closeChangePasswordModal();
-                showNotification('✅ Senha de acesso alterada com sucesso!');
+                showNotification('✅ Senha de acesso alterada e salva no servidor!');
             };
 
             // ============================================================
@@ -1830,11 +1845,20 @@
                 if (!db) return;
 
                 try {
-                    const doc = await db.collection('guilda').doc('teams').get();
-                    if (doc.exists) {
-                        setTeams(doc.data().teams);
-                        showNotification('✅ Dados carregados do banco de dados');
+                    // Carregar times
+                    const teamsDoc = await db.collection('guilda').doc('teams').get();
+                    if (teamsDoc.exists) {
+                        setTeams(teamsDoc.data().teams);
                     }
+
+                    // Carregar senha de acesso
+                    const configDoc = await db.collection('guilda').doc('config').get();
+                    if (configDoc.exists && configDoc.data().senhaAcesso) {
+                        setSenhaAcesso(configDoc.data().senhaAcesso);
+                        console.log('✅ Senha de acesso carregada do Firebase');
+                    }
+
+                    showNotification('✅ Dados carregados do banco de dados');
                 } catch (error) {
                     console.error('Erro ao carregar dados:', error);
                 }
