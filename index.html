@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE - Guilda</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- html2canvas para captura de tela -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #f5f5f5;
+            --bg-darker: #ffffff;
+            --primary: #1a1a1a;
+            --secondary: #2a2a2a;
+            --accent: #404040;
+            --text: #0d0d0d;
+            --text-dim: #666666;
+            --card-bg: rgba(240, 240, 240, 0.8);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --drag-over: rgba(0, 0, 0, 0.1);
+            --edit-mode: rgba(255, 140, 0, 0.1);
+            --healer: #00c853;
+            --dps: #ff4444;
+            --tank: #2196f3;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-darker);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(100, 100, 100, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(50, 50, 50, 0.04) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-10%, -10%) rotate(5deg); }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 60px 0 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Botão de Alterar Senha no canto superior esquerdo */
+        .admin-button-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .admin-btn {
+            padding: 8px 16px;
+            background: rgba(240, 240, 240, 0.9);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-btn:hover {
+            background: var(--primary);
+            color: var(--bg-darker);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .admin-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Header mais compacto na captura */
+        #teams-capture header {
+            padding: 30px 0 20px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #0d0d0d 0%, #2a2a2a 50%, #404040 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            animation: glowPulse 3s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::after {
+            content: 'RISE';
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, #0d0d0d 0%, #2a2a2a 50%, #404040 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(20px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Logo simplificado para captura - usa color ao invés de background-clip */
+        body.capturing .logo {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: #000000 !important;
+            background-clip: unset !important;
+            animation: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            color: #000000 !important;
+        }
+
+        body.capturing .logo::after {
+            display: none !important;
+        }
+
+        /* Garantir que não tenha sombras ou efeitos */
+        body.capturing header {
+            filter: none !important;
+            box-shadow: none !important;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(0, 0, 0, 0.5)); }
+        }
+
+        /* Remover animação durante captura */
+        body.capturing .logo {
+            animation: none !important;
+        }
+
+        .teams-section {
+            padding: 20px 0 80px;
+        }
+
+        /* Container de captura inclui header + times */
+        #teams-capture {
+            position: relative;
+            padding: 20px;
+            background: var(--bg-darker);
+            z-index: 10;
+        }
+
+        body.capturing #teams-capture {
+            background: #ffffff;
+        }
+
+        .capture-footer {
+            text-align: center;
+            padding: 20px 0 10px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .capture-footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0 40px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .action-btn:hover {
+            color: var(--bg-darker);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover::before {
+            left: 0;
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn.edit-mode {
+            background: #ff8c00;
+            border-color: #ff8c00;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .action-btn.has-changes {
+            background: var(--primary);
+            color: var(--bg-darker);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 140, 0, 0); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .modal-content {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .role-option {
+            padding: 12px;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .role-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-option.selected {
+            border-width: 3px;
+        }
+
+        .role-option.healer {
+            color: var(--healer);
+            border-color: var(--healer);
+        }
+
+        .role-option.healer.selected {
+            background: rgba(0, 200, 83, 0.1);
+        }
+
+        .role-option.dps {
+            color: var(--dps);
+            border-color: var(--dps);
+        }
+
+        .role-option.dps.selected {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .role-option.tank {
+            color: var(--tank);
+            border-color: var(--tank);
+        }
+
+        .role-option.tank.selected {
+            background: rgba(33, 150, 243, 0.1);
+        }
+
+        .leader-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .leader-toggle:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .leader-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--primary);
+            background: var(--primary);
+            color: var(--bg-darker);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .modal-btn.secondary {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .modal-btn.secondary:hover {
+            background: var(--primary);
+            color: var(--bg-darker);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(50, 50, 50, 0.03));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-card:hover::before {
+            opacity: 1;
+        }
+
+        .team-card.edit-mode {
+            border-color: #ff8c00;
+            background: var(--edit-mode);
+        }
+
+        .team-card.drag-over {
+            border-color: #ff8c00;
+            background: rgba(255, 140, 0, 0.2);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+            transform: scale(1.02);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .team-name:not(.editable):hover {
+            opacity: 0.7;
+        }
+
+        .team-name.editable {
+            cursor: pointer;
+        }
+
+        .team-name.editable:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .team-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.15);
+        }
+
+        .members-list {
+            list-style: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .member-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-left: 3px solid transparent;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+            cursor: default;
+        }
+
+        .member-item.editable {
+            cursor: pointer;
+        }
+
+        .member-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+            cursor: grabbing;
+        }
+
+        .member-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .member-item:not(.editable):hover {
+            opacity: 0.7;
+        }
+
+        .member-item.editable:not(.leader):hover {
+            transform: translateX(5px);
+        }
+
+        .member-item.leader:hover {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.16));
+        }
+
+        .member-item.editable:hover {
+            background: rgba(255, 140, 0, 0.05);
+            border-left-color: #ff8c00;
+        }
+
+        .member-item.leader.editable:hover {
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.08), rgba(255, 140, 0, 0.12));
+        }
+
+        .member-item.leader {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.12));
+            border-left-color: var(--primary);
+            border-left-width: 4px;
+            position: relative;
+        }
+
+        .badges-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+        }
+
+        .leader-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            pointer-events: none;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border: 2px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #404040, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #f5f5f5;
+            flex-shrink: 0;
+            pointer-events: none;
+        }
+
+        .member-item.leader .member-avatar {
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--primary);
+        }
+
+        .member-name {
+            font-size: 1rem;
+            font-weight: 400;
+            flex-grow: 1;
+            pointer-events: none;
+        }
+
+        .role-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            pointer-events: none;
+        }
+
+        .role-badge.healer {
+            background: rgba(0, 200, 83, 0.2);
+            color: var(--healer);
+            border: 1px solid var(--healer);
+        }
+
+        .role-badge.dps {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--dps);
+            border: 1px solid var(--dps);
+        }
+
+        .role-badge.tank {
+            background: rgba(33, 150, 243, 0.2);
+            color: var(--tank);
+            border: 1px solid var(--tank);
+        }
+
+        .drag-handle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .member-item.editable .drag-handle {
+            opacity: 1;
+            cursor: grab;
+        }
+
+        .member-item.editable .drag-handle:hover {
+            color: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .member-item.editable .drag-handle:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 60px;
+        }
+
+        footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .info-banner {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-banner.edit-mode {
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.1), rgba(255, 140, 0, 0.2));
+            border-left-color: #ff8c00;
+        }
+
+        .info-banner p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        .info-banner.edit-mode p {
+            color: #cc7000;
+            font-weight: 600;
+        }
+
+        .info-banner strong {
+            color: var(--primary);
+        }
+
+        .info-banner.edit-mode strong {
+            color: #ff8c00;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Otimizações para captura de tela */
+        body.capturing * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        body.capturing .bg-animation,
+        body.capturing .grid-overlay {
+            display: none !important;
+        }
+
+        body.capturing .team-card {
+            background: rgba(240, 240, 240, 1) !important;
+            backdrop-filter: none !important;
+        }
+
+        body.capturing .member-item {
+            background: rgba(255, 255, 255, 1) !important;
+        }
+
+        @media print {
+            .action-buttons {
+                display: none;
+            }
+        }
+
+        .team-card {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .team-card:nth-child(1) { animation-delay: 0.1s; }
+        .team-card:nth-child(2) { animation-delay: 0.2s; }
+        .team-card:nth-child(3) { animation-delay: 0.3s; }
+        .team-card:nth-child(4) { animation-delay: 0.4s; }
+        .team-card:nth-child(5) { animation-delay: 0.5s; }
+        .team-card:nth-child(6) { animation-delay: 0.6s; }
+        .team-card:nth-child(7) { animation-delay: 0.7s; }
+        .team-card:nth-child(8) { animation-delay: 0.8s; }
+        .team-card:nth-child(9) { animation-delay: 0.9s; }
+        .team-card:nth-child(10) { animation-delay: 1s; }
+        .team-card:nth-child(11) { animation-delay: 1.1s; }
+
+        /* ========================================== */
+        /* TELA DE LOGIN */
+        /* ========================================== */
+        
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-overlay.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 50px 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            animation: loginFadeIn 0.5s ease-out;
+        }
+
+        @keyframes loginFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 0.15em;
+            margin-bottom: 15px;
+        }
+
+        .login-subtitle {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .login-input.error {
+            border-color: #ff4444;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .login-button {
+            padding: 15px 30px;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-error {
+            color: #ff4444;
+            font-size: 0.9rem;
+            margin-top: -10px;
+            font-weight: 600;
+        }
+
+        .login-hint {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* ========================================== */
+        /* MODAL DE ALTERAÇÃO DE SENHA */
+        /* ========================================== */
+        
+        .change-password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .change-password-modal {
+            background: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .change-password-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .change-password-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .change-password-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .change-password-close:hover {
+            color: var(--primary);
+        }
+
+        .change-password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .change-password-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .change-password-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .change-password-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .change-password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .change-password-error {
+            color: #ff4444;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: -10px;
+        }
+
+        .change-password-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .change-password-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--primary);
+            background: var(--primary);
+            color: var(--bg-darker);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-password-btn:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .change-password-btn.secondary {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .change-password-btn.secondary:hover {
+            background: var(--primary);
+            color: var(--bg-darker);
+        }
+
+        .change-password-warning {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #cc7000;
+            text-align: center;
+        }
+
+        /* ========================================== */
+        /* MODAL FEUD */
+        /* ========================================== */
+        
+        .feud-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .feud-modal {
+            background: var(--bg-darker);
+            border: 3px solid var(--primary);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .feud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .feud-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+        }
+
+        .feud-close {
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .feud-close:hover {
+            color: #ff4444;
+            transform: rotate(90deg);
+        }
+
+        .feud-input-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid var(--card-border);
+        }
+
+        .feud-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .feud-input {
+            flex: 2;
+            padding: 12px 15px;
+            background: var(--bg-darker);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feud-input-number {
+            flex: 1;
+        }
+
+        .feud-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .feud-add-btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .feud-add-btn:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Área de exportação */
+        .feud-export-area {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .feud-export-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .feud-export-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 0.15em;
+            margin-bottom: 5px;
+        }
+
+        .feud-export-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .feud-list {
+            list-style: none;
+        }
+
+        .feud-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .feud-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+        }
+
+        .feud-item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .feud-item-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .feud-item-delete {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .feud-item-delete:hover {
+            background: #cc0000;
+            transform: scale(1.1);
+        }
+
+        .feud-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .feud-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .feud-action-btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--primary);
+            background: var(--primary);
+            color: var(--bg-darker);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feud-action-btn:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .feud-action-btn.danger {
+            background: #ff4444;
+            border-color: #ff4444;
+            color: white;
+        }
+
+        .feud-action-btn.danger:hover {
+            background: transparent;
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // ============================================================
+        // 🔥 SUAS CREDENCIAIS FIREBASE PRÉ-CONFIGURADAS
+        // ============================================================
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyADe_JzGHUfoQv-jLA4xAZPa5iRjt8pihY",
+            authDomain: "rise-32141.firebaseapp.com",
+            projectId: "rise-32141",
+            storageBucket: "rise-32141.firebasestorage.app",
+            messagingSenderId: "16190011651",
+            appId: "1:16190011651:web:53a70e6cf43bc5e9a79136"
+        };
+
+        let db;
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            db = firebase.firestore();
+            console.log('✅ Firebase conectado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao conectar Firebase:', error);
+        }
+
+        const App = () => {
+            const [teams, setTeams] = useState([
+                {
+                    id: 1,
+                    name: "Alpha Squad",
+                    members: [
+                        { name: "Commander Zeta", isLeader: true, role: "tank" },
+                        { name: "Ghost Rider", isLeader: false, role: "dps" },
+                        { name: "Phoenix", isLeader: false, role: "healer" },
+                        { name: "Shadow", isLeader: false, role: "dps" },
+                        { name: "Storm", isLeader: false, role: "dps" },
+                        { name: "Viper", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Beta Force",
+                    members: [
+                        { name: "Captain Nova", isLeader: true, role: "tank" },
+                        { name: "Thunder", isLeader: false, role: "dps" },
+                        { name: "Blaze", isLeader: false, role: "dps" },
+                        { name: "Frost", isLeader: false, role: "healer" },
+                        { name: "Echo", isLeader: false, role: "healer" },
+                        { name: "Razor", isLeader: false, role: "dps" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Gamma Elite",
+                    members: [
+                        { name: "Titan Prime", isLeader: true, role: "tank" },
+                        { name: "Wraith", isLeader: false, role: "dps" },
+                        { name: "Striker", isLeader: false, role: "dps" },
+                        { name: "Cobra", isLeader: false, role: "dps" },
+                        { name: "Falcon", isLeader: false, role: "healer" },
+                        { name: "Raven", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Delta Unit",
+                    members: [
+                        { name: "Overlord Ace", isLeader: true, role: "tank" },
+                        { name: "Spartan", isLeader: false, role: "tank" },
+                        { name: "Hunter", isLeader: false, role: "dps" },
+                        { name: "Reaper", isLeader: false, role: "dps" },
+                        { name: "Phantom", isLeader: false, role: "dps" },
+                        { name: "Maverick", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Epsilon Core",
+                    members: [
+                        { name: "Major Nexus", isLeader: true, role: "tank" },
+                        { name: "Tempest", isLeader: false, role: "dps" },
+                        { name: "Ranger", isLeader: false, role: "dps" },
+                        { name: "Sentinel", isLeader: false, role: "tank" },
+                        { name: "Valkyrie", isLeader: false, role: "healer" },
+                        { name: "Cipher", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Zeta Division",
+                    members: [
+                        { name: "Chief Omega", isLeader: true, role: "tank" },
+                        { name: "Spectre", isLeader: false, role: "dps" },
+                        { name: "Fury", isLeader: false, role: "dps" },
+                        { name: "Atlas", isLeader: false, role: "tank" },
+                        { name: "Onyx", isLeader: false, role: "dps" },
+                        { name: "Volt", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 7,
+                    name: "Eta Legion",
+                    members: [
+                        { name: "General Apex", isLeader: true, role: "tank" },
+                        { name: "Kraken", isLeader: false, role: "tank" },
+                        { name: "Hydra", isLeader: false, role: "dps" },
+                        { name: "Zeus", isLeader: false, role: "dps" },
+                        { name: "Hades", isLeader: false, role: "dps" },
+                        { name: "Poseidon", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 8,
+                    name: "Theta Corps",
+                    members: [
+                        { name: "Colonel Vertex", isLeader: true, role: "tank" },
+                        { name: "Rocket", isLeader: false, role: "dps" },
+                        { name: "Dash", isLeader: false, role: "dps" },
+                        { name: "Nitro", isLeader: false, role: "dps" },
+                        { name: "Turbo", isLeader: false, role: "dps" },
+                        { name: "Jet", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 9,
+                    name: "Iota Strike",
+                    members: [
+                        { name: "Marshal Eclipse", isLeader: true, role: "tank" },
+                        { name: "Orion", isLeader: false, role: "dps" },
+                        { name: "Nebula", isLeader: false, role: "healer" },
+                        { name: "Cosmos", isLeader: false, role: "dps" },
+                        { name: "Astro", isLeader: false, role: "dps" },
+                        { name: "Quasar", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 10,
+                    name: "Kappa Watch",
+                    members: [
+                        { name: "Warden Pulse", isLeader: true, role: "tank" },
+                        { name: "Guardian", isLeader: false, role: "tank" },
+                        { name: "Defender", isLeader: false, role: "tank" },
+                        { name: "Bulwark", isLeader: false, role: "dps" },
+                        { name: "Bastion", isLeader: false, role: "healer" },
+                        { name: "Shield", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 11,
+                    name: "Lambda Ops",
+                    members: [
+                        { name: "Director Flux", isLeader: true, role: "tank" },
+                        { name: "Chaos", isLeader: false, role: "dps" },
+                        { name: "Matrix", isLeader: false, role: "dps" },
+                        { name: "Vector", isLeader: false, role: "dps" },
+                        { name: "Prism", isLeader: false, role: "healer" },
+                        { name: "Nexus", isLeader: false, role: "healer" }
+                    ]
+                }
+            ]);
+
+            const [editMemberModal, setEditMemberModal] = useState(null);
+            const [editTeamModal, setEditTeamModal] = useState(null);
+            const [notification, setNotification] = useState(null);
+            const [draggedMember, setDraggedMember] = useState(null);
+            const [draggedFromTeam, setDraggedFromTeam] = useState(null);
+            const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+            const [isEditMode, setIsEditMode] = useState(false);
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [passwordInput, setPasswordInput] = useState('');
+            const [passwordError, setPasswordError] = useState('');
+            const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+            const [adminPassword, setAdminPassword] = useState('');
+            const [newAccessPassword, setNewAccessPassword] = useState('');
+            const [confirmAccessPassword, setConfirmAccessPassword] = useState('');
+            const [changePasswordError, setChangePasswordError] = useState('');
+            const [showFeudModal, setShowFeudModal] = useState(false);
+            const [feudItems, setFeudItems] = useState([]);
+            const [feudName, setFeudName] = useState('');
+            const [feudNumber, setFeudNumber] = useState('');
+
+            // ============================================================
+            // 🔐 CONFIGURAÇÃO DAS SENHAS
+            // ============================================================
+            // SENHA DE ADMINISTRADOR (para alterar a senha de acesso)
+            // ⚠️ NUNCA compartilhe esta senha! Apenas você deve saber!
+            const SENHA_ADMIN = 'n0v4s3nh4';
+            
+            // SENHA DE ACESSO (para entrar no site)
+            // Esta pode ser compartilhada com os membros da guilda
+            const [senhaAcesso, setSenhaAcesso] = useState('rise2026');
+
+            // Carregar dados do Firebase
+            useEffect(() => {
+                loadFromDatabase();
+                checkSession();
+            }, []);
+
+            const checkSession = () => {
+                const session = sessionStorage.getItem('guilda-rise-auth');
+                if (session === 'authenticated') {
+                    setIsAuthenticated(true);
+                }
+            };
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                
+                if (passwordInput === senhaAcesso) {
+                    sessionStorage.setItem('guilda-rise-auth', 'authenticated');
+                    setIsAuthenticated(true);
+                    setPasswordError('');
+                    showNotification('✅ Acesso autorizado!');
+                } else {
+                    setPasswordError('❌ Senha incorreta');
+                    setPasswordInput('');
+                    
+                    // Adicionar classe de erro para animação
+                    const input = document.querySelector('.login-input');
+                    if (input) {
+                        input.classList.add('error');
+                        setTimeout(() => input.classList.remove('error'), 500);
+                    }
+                }
+            };
+
+            const handleLogout = () => {
+                sessionStorage.removeItem('guilda-rise-auth');
+                setIsAuthenticated(false);
+                setPasswordInput('');
+                showNotification('🔒 Sessão encerrada');
+            };
+
+            const openChangePasswordModal = () => {
+                setShowChangePasswordModal(true);
+                setAdminPassword('');
+                setNewAccessPassword('');
+                setConfirmAccessPassword('');
+                setChangePasswordError('');
+            };
+
+            const closeChangePasswordModal = () => {
+                setShowChangePasswordModal(false);
+                setAdminPassword('');
+                setNewAccessPassword('');
+                setConfirmAccessPassword('');
+                setChangePasswordError('');
+            };
+
+            const handleChangePassword = (e) => {
+                e.preventDefault();
+                
+                // Validar senha de administrador
+                if (adminPassword !== SENHA_ADMIN) {
+                    setChangePasswordError('❌ Senha de administrador incorreta!');
+                    setAdminPassword('');
+                    return;
+                }
+                
+                // Validar nova senha
+                if (!newAccessPassword || newAccessPassword.length < 4) {
+                    setChangePasswordError('❌ A senha deve ter pelo menos 4 caracteres');
+                    return;
+                }
+                
+                // Validar confirmação
+                if (newAccessPassword !== confirmAccessPassword) {
+                    setChangePasswordError('❌ As senhas não coincidem!');
+                    return;
+                }
+                
+                // Alterar senha
+                setSenhaAcesso(newAccessPassword);
+                closeChangePasswordModal();
+                showNotification('✅ Senha de acesso alterada com sucesso!');
+            };
+
+            // ============================================================
+            // 🎮 SISTEMA FEUD
+            // ============================================================
+            
+            const openFeudModal = () => {
+                setShowFeudModal(true);
+            };
+
+            const closeFeudModal = () => {
+                setShowFeudModal(false);
+            };
+
+            const addFeudItem = (e) => {
+                e.preventDefault();
+                
+                if (!feudName.trim()) {
+                    showNotification('⚠️ Digite um nome');
+                    return;
+                }
+                
+                if (!feudNumber.trim()) {
+                    showNotification('⚠️ Digite um número');
+                    return;
+                }
+                
+                const newItem = {
+                    id: Date.now(),
+                    name: feudName.trim(),
+                    number: feudNumber.trim()
+                };
+                
+                setFeudItems([...feudItems, newItem]);
+                setFeudName('');
+                setFeudNumber('');
+                showNotification('✅ Item adicionado!');
+            };
+
+            const removeFeudItem = (id) => {
+                setFeudItems(feudItems.filter(item => item.id !== id));
+                showNotification('🗑️ Item removido');
+            };
+
+            const clearAllFeudItems = () => {
+                if (confirm('Deseja limpar todos os itens?')) {
+                    setFeudItems([]);
+                    showNotification('🗑️ Lista limpa');
+                }
+            };
+
+            const exportFeudAsJPEG = async () => {
+                try {
+                    const element = document.getElementById('feud-export-area');
+                    
+                    if (!element) {
+                        showNotification('❌ Erro ao capturar');
+                        return;
+                    }
+
+                    if (feudItems.length === 0) {
+                        showNotification('⚠️ Adicione itens antes de exportar');
+                        return;
+                    }
+
+                    showNotification('📸 Gerando imagem FEUD...');
+
+                    // Aguardar renderização
+                    await new Promise(resolve => setTimeout(resolve, 300));
+
+                    // Capturar
+                    const canvas = await html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: 2,
+                        logging: false,
+                        useCORS: true
+                    });
+
+                    // Converter e baixar
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            showNotification('❌ Erro ao gerar imagem');
+                            return;
+                        }
+                        
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `feud-${new Date().toISOString().split('T')[0]}.jpg`;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        showNotification('✅ Imagem FEUD exportada!');
+                    }, 'image/jpeg', 0.95);
+
+                } catch (error) {
+                    console.error('Erro ao exportar FEUD:', error);
+                    showNotification('❌ Erro: ' + error.message);
+                }
+            };
+
+            const loadFromDatabase = async () => {
+                if (!db) return;
+
+                try {
+                    const doc = await db.collection('guilda').doc('teams').get();
+                    if (doc.exists) {
+                        setTeams(doc.data().teams);
+                        showNotification('✅ Dados carregados do banco de dados');
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                }
+            };
+
+            const saveToDatabase = async () => {
+                if (!db) {
+                    showNotification('❌ Firebase não configurado');
+                    return;
+                }
+
+                try {
+                    await db.collection('guilda').doc('teams').set({
+                        teams: teams,
+                        lastUpdate: new Date().toISOString()
+                    });
+                    setHasUnsavedChanges(false);
+                    showNotification('✅ Configuração salva com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao salvar:', error);
+                    showNotification('❌ Erro ao salvar dados');
+                }
+            };
+
+            const showNotification = (message) => {
+                setNotification(message);
+                setTimeout(() => setNotification(null), 3000);
+            };
+
+            const toggleEditMode = () => {
+                setIsEditMode(!isEditMode);
+                if (!isEditMode) {
+                    showNotification('🔓 Modo de edição ATIVADO! Agora você pode editar e mover membros.');
+                } else {
+                    showNotification('🔒 Modo de edição DESATIVADO. Edições bloqueadas.');
+                }
+            };
+
+            // Abrir modal de edição de membro individual
+            const openMemberEdit = (teamId, memberIndex) => {
+                if (!isEditMode) {
+                    showNotification('🔒 Ative o modo de edição primeiro!');
+                    return;
+                }
+                
+                const team = teams.find(t => t.id === teamId);
+                setEditMemberModal({
+                    teamId,
+                    memberIndex,
+                    member: { ...team.members[memberIndex] },
+                    originalMember: team.members[memberIndex]
+                });
+            };
+
+            // Salvar edição de membro
+            const saveMemberEdit = () => {
+                const { teamId, memberIndex, member } = editMemberModal;
+                
+                const updatedTeams = teams.map(team => {
+                    if (team.id === teamId) {
+                        const newMembers = [...team.members];
+                        
+                        // Se tornou líder, remover líder anterior
+                        if (member.isLeader) {
+                            newMembers.forEach((m, i) => {
+                                if (i !== memberIndex) m.isLeader = false;
+                            });
+                        }
+                        
+                        newMembers[memberIndex] = member;
+                        return { ...team, members: newMembers };
+                    }
+                    return team;
+                });
+
+                setTeams(updatedTeams);
+                setEditMemberModal(null);
+                setHasUnsavedChanges(true);
+                showNotification('✅ Membro atualizado! Clique em "Salvar" para gravar.');
+            };
+
+            // Abrir modal de edição de time
+            const openTeamEdit = (teamId) => {
+                if (!isEditMode) {
+                    showNotification('🔒 Ative o modo de edição primeiro!');
+                    return;
+                }
+                
+                const team = teams.find(t => t.id === teamId);
+                setEditTeamModal({
+                    teamId,
+                    teamName: team.name
+                });
+            };
+
+            // Salvar edição de time
+            const saveTeamEdit = () => {
+                const { teamId, teamName } = editTeamModal;
+                
+                const updatedTeams = teams.map(team => {
+                    if (team.id === teamId) {
+                        return { ...team, name: teamName };
+                    }
+                    return team;
+                });
+
+                setTeams(updatedTeams);
+                setEditTeamModal(null);
+                setHasUnsavedChanges(true);
+                showNotification('✅ Nome do time atualizado! Clique em "Salvar".');
+            };
+
+            const exportTable = async () => {
+                try {
+                    // Selecionar elementos
+                    const element = document.getElementById('teams-capture');
+                    const banner = element ? element.querySelector('.info-banner') : null;
+                    const body = document.body;
+                    
+                    if (!element) {
+                        console.error('Elemento teams-capture não encontrado');
+                        showNotification('❌ Erro: Elemento não encontrado');
+                        return;
+                    }
+
+                    showNotification('📸 Gerando imagem...');
+
+                    // Scroll para o topo
+                    window.scrollTo(0, 0);
+
+                    // Preparar para captura
+                    const bannerDisplay = banner ? banner.style.display : null;
+                    if (banner) banner.style.display = 'none';
+                    
+                    // Desabilitar animações temporariamente
+                    body.classList.add('capturing');
+
+                    // Forçar aplicação de estilos no logo
+                    const logo = element.querySelector('.logo');
+                    if (logo) {
+                        const logoAfter = window.getComputedStyle(logo, '::after');
+                        console.log('Logo encontrado. Aplicando estilos de captura...');
+                    }
+
+                    // Aguardar renderização
+                    await new Promise(resolve => setTimeout(resolve, 800));
+
+                    // Verificar estrutura
+                    const teamsGrid = element.querySelector('.teams-grid');
+                    console.log('Elemento principal:', element);
+                    console.log('Teams grid encontrado:', teamsGrid);
+                    console.log('Número de teams:', teamsGrid ? teamsGrid.children.length : 0);
+                    console.log('Dimensões do elemento:', {
+                        width: element.offsetWidth,
+                        height: element.offsetHeight,
+                        scrollWidth: element.scrollWidth,
+                        scrollHeight: element.scrollHeight
+                    });
+
+                    // Capturar com configurações otimizadas
+                    const canvas = await html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: 2,
+                        logging: true,
+                        useCORS: true,
+                        allowTaint: false,
+                        onclone: (clonedDoc) => {
+                            console.log('Documento clonado para captura');
+                            const clonedElement = clonedDoc.getElementById('teams-capture');
+                            if (clonedElement) {
+                                console.log('Elemento clonado encontrado');
+                                clonedElement.style.transform = 'none';
+                                
+                                // Simplificar o logo no clone
+                                const clonedLogo = clonedElement.querySelector('.logo');
+                                if (clonedLogo) {
+                                    clonedLogo.style.background = 'none';
+                                    clonedLogo.style.webkitBackgroundClip = 'unset';
+                                    clonedLogo.style.webkitTextFillColor = '#000000';
+                                    clonedLogo.style.color = '#000000';
+                                    clonedLogo.style.animation = 'none';
+                                    clonedLogo.style.filter = 'none';
+                                    clonedLogo.style.textShadow = 'none';
+                                    
+                                    // Remover ::after completamente
+                                    const style = clonedDoc.createElement('style');
+                                    style.textContent = '.logo::after { display: none !important; content: "" !important; }';
+                                    clonedDoc.head.appendChild(style);
+                                    
+                                    console.log('Logo simplificado no clone (sem ::after)');
+                                }
+                            }
+                        }
+                    });
+
+                    // Restaurar estado original
+                    if (banner) banner.style.display = bannerDisplay;
+                    body.classList.remove('capturing');
+
+                    console.log('Canvas criado:', canvas.width, 'x', canvas.height);
+
+                    if (!canvas || canvas.width === 0 || canvas.height === 0) {
+                        showNotification('❌ Erro: Canvas vazio. Verifique o console.');
+                        console.error('Canvas inválido:', canvas);
+                        return;
+                    }
+
+                    // Converter e baixar
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            showNotification('❌ Erro ao gerar blob');
+                            return;
+                        }
+                        
+                        console.log('Blob criado:', blob.size, 'bytes');
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `guilda-rise-times-${new Date().toISOString().split('T')[0]}.jpg`;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        showNotification('✅ Imagem exportada com sucesso!');
+                    }, 'image/jpeg', 0.95);
+
+                } catch (error) {
+                    console.error('Erro detalhado ao exportar:', error);
+                    showNotification('❌ Erro: ' + error.message);
+                    document.body.classList.remove('capturing');
+                }
+            };
+
+            // DRAG AND DROP
+            const handleDragStart = (e, member, teamId) => {
+                if (!isEditMode) {
+                    e.preventDefault();
+                    return;
+                }
+                setDraggedMember(member);
+                setDraggedFromTeam(teamId);
+                // Adicionar classe dragging ao li parent
+                const li = e.currentTarget.closest('.member-item');
+                if (li) li.classList.add('dragging');
+            };
+
+            const handleDragEnd = (e) => {
+                // Remover classe dragging do li parent
+                const li = e.currentTarget.closest('.member-item');
+                if (li) li.classList.remove('dragging');
+                setDraggedMember(null);
+                setDraggedFromTeam(null);
+            };
+
+            const handleDragOver = (e) => {
+                if (!isEditMode) return;
+                e.preventDefault();
+            };
+
+            const handleDragEnter = (e, teamId) => {
+                if (!isEditMode) return;
+                e.preventDefault();
+                e.currentTarget.classList.add('drag-over');
+            };
+
+            const handleDragLeave = (e) => {
+                if (!isEditMode) return;
+                e.currentTarget.classList.remove('drag-over');
+            };
+
+            const handleDrop = (e, targetTeamId) => {
+                if (!isEditMode) return;
+                
+                e.preventDefault();
+                e.currentTarget.classList.remove('drag-over');
+
+                if (!draggedMember || !draggedFromTeam || draggedFromTeam === targetTeamId) return;
+
+                const updatedTeams = teams.map(team => {
+                    if (team.id === draggedFromTeam) {
+                        const wasLeader = draggedMember.isLeader;
+                        const membersWithoutDragged = team.members.filter(
+                            m => m.name !== draggedMember.name
+                        );
+                        
+                        if (wasLeader && membersWithoutDragged.length > 0) {
+                            membersWithoutDragged[0].isLeader = true;
+                        }
+                        
+                        return { ...team, members: membersWithoutDragged };
+                    }
+                    
+                    if (team.id === targetTeamId) {
+                        const memberToAdd = { ...draggedMember, isLeader: false };
+                        return { ...team, members: [...team.members, memberToAdd] };
+                    }
+                    
+                    return team;
+                });
+
+                setTeams(updatedTeams);
+                setHasUnsavedChanges(true);
+                showNotification(`✅ ${draggedMember.name} movido! Clique em "Salvar".`);
+            };
+
+            return (
+                <>
+                    {/* TELA DE LOGIN */}
+                    <div className={`login-overlay ${isAuthenticated ? 'hidden' : ''}`}>
+                        <div className="login-box">
+                            <h1 className="login-logo">RISE</h1>
+                            <p className="login-subtitle">Guilda de Elite</p>
+                            
+                            <form className="login-form" onSubmit={handleLogin}>
+                                <input 
+                                    type="password"
+                                    className="login-input"
+                                    placeholder="Digite a senha"
+                                    value={passwordInput}
+                                    onChange={(e) => setPasswordInput(e.target.value)}
+                                    autoFocus
+                                />
+                                
+                                {passwordError && (
+                                    <div className="login-error">{passwordError}</div>
+                                )}
+                                
+                                <button type="submit" className="login-button">
+                                    Entrar
+                                </button>
+                            </form>
+                            
+                            <p className="login-hint">🔒 Acesso restrito aos membros</p>
+                        </div>
+                    </div>
+
+                    {/* CONTEÚDO PRINCIPAL */}
+                    <div className="container">
+                        {/* Botão Admin no canto superior esquerdo */}
+                        <div className="admin-button-container">
+                            <button className="admin-btn" onClick={openChangePasswordModal}>
+                                🔑 Alterar Senha
+                            </button>
+                        </div>
+
+                        <div className="action-buttons">
+                                <button 
+                                    className={`action-btn ${isEditMode ? 'edit-mode' : ''}`}
+                                    onClick={toggleEditMode}
+                                >
+                                    {isEditMode ? '🔒 Concluir Edição' : '🔓 Editar Time'}
+                                </button>
+                                <button 
+                                    className={`action-btn ${hasUnsavedChanges ? 'has-changes' : ''}`}
+                                    onClick={saveToDatabase}
+                                >
+                                    {hasUnsavedChanges ? '💾 Salvar Alterações' : 'Salvar Configuração'}
+                                </button>
+                                <button className="action-btn" onClick={exportTable}>
+                                    Exportar Imagem
+                                </button>
+                                <button className="action-btn" onClick={openFeudModal}>
+                                    FEUD
+                                </button>
+                                <button className="action-btn" onClick={handleLogout}>
+                                    🚪 Sair
+                                </button>
+                            </div>
+
+                        <div id="teams-capture">
+                        <header>
+                            <h1 className="logo">RISE</h1>
+                        </header>
+
+                        <section className="teams-section">
+                            <div className={`info-banner ${isEditMode ? 'edit-mode' : ''}`}>
+                                <p>
+                                    {isEditMode ? (
+                                        <><strong>🔓 MODO DE EDIÇÃO ATIVO!</strong> Clique em membros para editar nome/role/líder. Arraste para mover entre times. Clique em "Concluir" quando terminar.</>
+                                    ) : (
+                                        <><strong>🔒 Modo Bloqueado:</strong> Clique em "Editar Time" para ativar o modo de edição e poder editar nomes, roles e mover membros entre times.</>
+                                    )}
+                                </p>
+                            </div>
+                            
+                            <div className="teams-grid">
+                                {teams.map((team) => (
+                                    <div 
+                                        key={team.id} 
+                                        className={`team-card ${isEditMode ? 'edit-mode' : ''}`}
+                                        onDragOver={handleDragOver}
+                                        onDragEnter={(e) => handleDragEnter(e, team.id)}
+                                        onDragLeave={handleDragLeave}
+                                        onDrop={(e) => handleDrop(e, team.id)}
+                                    >
+                                        <div className="team-header">
+                                            <h3 
+                                                className={`team-name ${isEditMode ? 'editable' : ''}`}
+                                                onClick={() => openTeamEdit(team.id)}
+                                                title={isEditMode ? "Clique para editar o nome do time" : "Ative o modo de edição para editar"}
+                                            >
+                                                {team.name}
+                                            </h3>
+                                            <span className="team-number">#{team.id.toString().padStart(2, '0')}</span>
+                                        </div>
+                                        
+                                        <ul className="members-list">
+                                            {team.members.map((member, index) => (
+                                                <li 
+                                                    key={`${team.id}-${index}`}
+                                                    className={`member-item ${member.isLeader ? 'leader' : ''} ${isEditMode ? 'editable' : ''}`}
+                                                    onClick={() => openMemberEdit(team.id, index)}
+                                                    title={isEditMode ? "Clique para editar ou arraste ⋮⋮ para mover" : "Ative o modo de edição para editar"}
+                                                >
+                                                    <span 
+                                                        className="drag-handle"
+                                                        draggable={isEditMode}
+                                                        onDragStart={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDragStart(e, member, team.id);
+                                                        }}
+                                                        onDragEnd={handleDragEnd}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        ⋮⋮
+                                                    </span>
+                                                    <div className="member-avatar">
+                                                        {member.name.charAt(0)}
+                                                    </div>
+                                                    <span className="member-name">{member.name}</span>
+                                                    <div className="badges-container">
+                                                        {member.isLeader && (
+                                                            <span className="leader-badge">LÍDER</span>
+                                                        )}
+                                                        <span className={`role-badge ${member.role}`}>
+                                                            {member.role}
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                        
+                        <div className="capture-footer">
+                            <p>Guilda RISE - {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        </div>
+                        
+                        </div>
+                    </div>
+
+                    <footer>
+                        <p>© 2026 RISE Guilda - Todos os direitos reservados</p>
+                    </footer>
+
+                    {/* MODAL DE EDIÇÃO DE MEMBRO */}
+                    {editMemberModal && (
+                        <div className="modal-overlay" onClick={() => setEditMemberModal(null)}>
+                            <div className="modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Editar Membro</h2>
+                                    <button className="close-btn" onClick={() => setEditMemberModal(null)}>×</button>
+                                </div>
+                                
+                                <div className="modal-content">
+                                    <div className="form-group">
+                                        <label className="form-label">Nome do Membro</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={editMemberModal.member.name}
+                                            onChange={(e) => setEditMemberModal({
+                                                ...editMemberModal,
+                                                member: { ...editMemberModal.member, name: e.target.value }
+                                            })}
+                                            placeholder="Digite o nome"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label">Role</label>
+                                        <div className="role-selector">
+                                            <div 
+                                                className={`role-option healer ${editMemberModal.member.role === 'healer' ? 'selected' : ''}`}
+                                                onClick={() => setEditMemberModal({
+                                                    ...editMemberModal,
+                                                    member: { ...editMemberModal.member, role: 'healer' }
+                                                })}
+                                            >
+                                                ✚ Healer
+                                            </div>
+                                            <div 
+                                                className={`role-option dps ${editMemberModal.member.role === 'dps' ? 'selected' : ''}`}
+                                                onClick={() => setEditMemberModal({
+                                                    ...editMemberModal,
+                                                    member: { ...editMemberModal.member, role: 'dps' }
+                                                })}
+                                            >
+                                                ⚔️ DPS
+                                            </div>
+                                            <div 
+                                                className={`role-option tank ${editMemberModal.member.role === 'tank' ? 'selected' : ''}`}
+                                                onClick={() => setEditMemberModal({
+                                                    ...editMemberModal,
+                                                    member: { ...editMemberModal.member, role: 'tank' }
+                                                })}
+                                            >
+                                                🛡️ Tank
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <div 
+                                            className="leader-toggle"
+                                            onClick={() => setEditMemberModal({
+                                                ...editMemberModal,
+                                                member: { ...editMemberModal.member, isLeader: !editMemberModal.member.isLeader }
+                                            })}
+                                        >
+                                            <input 
+                                                type="checkbox"
+                                                className="leader-checkbox"
+                                                checked={editMemberModal.member.isLeader}
+                                                readOnly
+                                            />
+                                            <span className="form-label" style={{ margin: 0 }}>Definir como Líder do Time</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="modal-actions">
+                                    <button className="modal-btn secondary" onClick={() => setEditMemberModal(null)}>
+                                        Cancelar
+                                    </button>
+                                    <button className="modal-btn" onClick={saveMemberEdit}>
+                                        Salvar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE EDIÇÃO DE TIME */}
+                    {editTeamModal && (
+                        <div className="modal-overlay" onClick={() => setEditTeamModal(null)}>
+                            <div className="modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Editar Nome do Time</h2>
+                                    <button className="close-btn" onClick={() => setEditTeamModal(null)}>×</button>
+                                </div>
+                                
+                                <div className="modal-content">
+                                    <div className="form-group">
+                                        <label className="form-label">Nome do Time</label>
+                                        <input 
+                                            type="text"
+                                            className="form-input"
+                                            value={editTeamModal.teamName}
+                                            onChange={(e) => setEditTeamModal({
+                                                ...editTeamModal,
+                                                teamName: e.target.value
+                                            })}
+                                            placeholder="Digite o nome do time"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="modal-actions">
+                                    <button className="modal-btn secondary" onClick={() => setEditTeamModal(null)}>
+                                        Cancelar
+                                    </button>
+                                    <button className="modal-btn" onClick={saveTeamEdit}>
+                                        Salvar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {notification && (
+                        <div className="notification">
+                            {notification}
+                        </div>
+                    )}
+
+                    {/* MODAL DE ALTERAÇÃO DE SENHA */}
+                    {showChangePasswordModal && (
+                        <div className="change-password-overlay" onClick={closeChangePasswordModal}>
+                            <div className="change-password-modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="change-password-header">
+                                    <h3 className="change-password-title">🔑 Alterar Senha de Acesso</h3>
+                                    <button className="change-password-close" onClick={closeChangePasswordModal}>×</button>
+                                </div>
+
+                                <form className="change-password-form" onSubmit={handleChangePassword}>
+                                    <div className="change-password-group">
+                                        <label className="change-password-label">Senha de Administrador</label>
+                                        <input 
+                                            type="password"
+                                            className="change-password-input"
+                                            placeholder="Digite a senha de admin"
+                                            value={adminPassword}
+                                            onChange={(e) => setAdminPassword(e.target.value)}
+                                            autoFocus
+                                        />
+                                    </div>
+
+                                    <div className="change-password-group">
+                                        <label className="change-password-label">Nova Senha de Acesso</label>
+                                        <input 
+                                            type="password"
+                                            className="change-password-input"
+                                            placeholder="Digite a nova senha"
+                                            value={newAccessPassword}
+                                            onChange={(e) => setNewAccessPassword(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="change-password-group">
+                                        <label className="change-password-label">Confirmar Nova Senha</label>
+                                        <input 
+                                            type="password"
+                                            className="change-password-input"
+                                            placeholder="Digite novamente"
+                                            value={confirmAccessPassword}
+                                            onChange={(e) => setConfirmAccessPassword(e.target.value)}
+                                        />
+                                    </div>
+
+                                    {changePasswordError && (
+                                        <div className="change-password-error">{changePasswordError}</div>
+                                    )}
+
+                                    <div className="change-password-buttons">
+                                        <button type="button" className="change-password-btn secondary" onClick={closeChangePasswordModal}>
+                                            Cancelar
+                                        </button>
+                                        <button type="submit" className="change-password-btn">
+                                            Alterar Senha
+                                        </button>
+                                    </div>
+
+                                    <div className="change-password-warning">
+                                        ⚠️ Compartilhe a nova senha com os membros da guilda!
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL FEUD */}
+                    {showFeudModal && (
+                        <div className="feud-overlay" onClick={closeFeudModal}>
+                            <div className="feud-modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="feud-header">
+                                    <h2 className="feud-title">FEUD</h2>
+                                    <button className="feud-close" onClick={closeFeudModal}>×</button>
+                                </div>
+
+                                {/* Formulário de adição */}
+                                <div className="feud-input-section">
+                                    <form className="feud-form" onSubmit={addFeudItem}>
+                                        <input 
+                                            type="text"
+                                            className="feud-input"
+                                            placeholder="Digite o nome"
+                                            value={feudName}
+                                            onChange={(e) => setFeudName(e.target.value)}
+                                        />
+                                        <input 
+                                            type="text"
+                                            className="feud-input feud-input-number"
+                                            placeholder="Número"
+                                            value={feudNumber}
+                                            onChange={(e) => setFeudNumber(e.target.value)}
+                                        />
+                                        <button type="submit" className="feud-add-btn">
+                                            ➕ Adicionar
+                                        </button>
+                                    </form>
+                                </div>
+
+                                {/* Área de exportação (captura) */}
+                                <div className="feud-export-area" id="feud-export-area">
+                                    <div className="feud-export-header">
+                                        <h3 className="feud-export-title">FEUD</h3>
+                                        <p className="feud-export-subtitle">Ranking</p>
+                                    </div>
+
+                                    {feudItems.length === 0 ? (
+                                        <div className="feud-empty">
+                                            📋 Adicione itens acima para começar
+                                        </div>
+                                    ) : (
+                                        <ul className="feud-list">
+                                            {feudItems.map((item) => (
+                                                <li key={item.id} className="feud-item">
+                                                    <span className="feud-item-name">{item.name}</span>
+                                                    <span className="feud-item-number">{item.number}</span>
+                                                    <button 
+                                                        className="feud-item-delete"
+                                                        onClick={() => removeFeudItem(item.id)}
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                {/* Ações */}
+                                <div className="feud-actions">
+                                    <button className="feud-action-btn" onClick={exportFeudAsJPEG}>
+                                        📸 Exportar como JPEG
+                                    </button>
+                                    <button className="feud-action-btn danger" onClick={clearAllFeudItems}>
+                                        🗑️ Limpar Tudo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
