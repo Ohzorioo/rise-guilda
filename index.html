@@ -1441,6 +1441,260 @@
             background: transparent;
             color: #ff4444;
         }
+
+        /* ========================================== */
+        /* BOTÕES DE TAG */
+        /* ========================================== */
+        
+        .tag-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
+        }
+
+        .tag-btn {
+            padding: 15px 40px;
+            background: var(--card-bg);
+            border: 3px solid var(--card-border);
+            color: var(--text);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .tag-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tag-btn.active {
+            background: var(--primary);
+            color: var(--bg-darker);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tag-btn.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ========================================== */
+        /* CRONOGRAMA */
+        /* ========================================== */
+        
+        .cronograma-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1400px;
+        }
+
+        .cronograma-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cronograma-title {
+            font-size: 2rem;
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 10px;
+        }
+
+        .cronograma-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .day-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .day-name {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .events-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .event-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .event-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .event-time {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .event-name {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .event-points {
+            font-size: 0.85rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .event-delete {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .event-item:hover .event-delete {
+            opacity: 1;
+        }
+
+        .event-delete:hover {
+            background: #cc0000;
+        }
+
+        .add-event-form {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .add-event-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .add-event-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .add-event-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .add-event-btn:hover {
+            background: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .cronograma-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .cronograma-action-btn {
+            padding: 15px 40px;
+            background: var(--primary);
+            color: var(--bg-darker);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cronograma-action-btn:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .cronograma-action-btn.secondary {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--card-border);
+        }
+
+        .cronograma-action-btn.secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -1478,8 +1732,12 @@
 
         const App = () => {
             const [teams, setTeams] = useState([
+                // ============================================
+                // TAG 1 - FORMAÇÃO PRINCIPAL (Times 1-11)
+                // ============================================
                 {
                     id: 1,
+                    tag: "tag1",
                     name: "Alpha Squad",
                     members: [
                         { name: "Commander Zeta", isLeader: true, role: "tank" },
@@ -1492,6 +1750,7 @@
                 },
                 {
                     id: 2,
+                    tag: "tag1",
                     name: "Beta Force",
                     members: [
                         { name: "Captain Nova", isLeader: true, role: "tank" },
@@ -1504,6 +1763,7 @@
                 },
                 {
                     id: 3,
+                    tag: "tag1",
                     name: "Gamma Elite",
                     members: [
                         { name: "Titan Prime", isLeader: true, role: "tank" },
@@ -1516,6 +1776,7 @@
                 },
                 {
                     id: 4,
+                    tag: "tag1",
                     name: "Delta Unit",
                     members: [
                         { name: "Overlord Ace", isLeader: true, role: "tank" },
@@ -1528,6 +1789,7 @@
                 },
                 {
                     id: 5,
+                    tag: "tag1",
                     name: "Epsilon Core",
                     members: [
                         { name: "Major Nexus", isLeader: true, role: "tank" },
@@ -1540,6 +1802,7 @@
                 },
                 {
                     id: 6,
+                    tag: "tag1",
                     name: "Zeta Division",
                     members: [
                         { name: "Chief Omega", isLeader: true, role: "tank" },
@@ -1552,6 +1815,7 @@
                 },
                 {
                     id: 7,
+                    tag: "tag1",
                     name: "Eta Legion",
                     members: [
                         { name: "General Apex", isLeader: true, role: "tank" },
@@ -1564,6 +1828,7 @@
                 },
                 {
                     id: 8,
+                    tag: "tag1",
                     name: "Theta Corps",
                     members: [
                         { name: "Colonel Vertex", isLeader: true, role: "tank" },
@@ -1576,6 +1841,7 @@
                 },
                 {
                     id: 9,
+                    tag: "tag1",
                     name: "Iota Strike",
                     members: [
                         { name: "Marshal Eclipse", isLeader: true, role: "tank" },
@@ -1588,6 +1854,7 @@
                 },
                 {
                     id: 10,
+                    tag: "tag1",
                     name: "Kappa Watch",
                     members: [
                         { name: "Warden Pulse", isLeader: true, role: "tank" },
@@ -1600,6 +1867,7 @@
                 },
                 {
                     id: 11,
+                    tag: "tag1",
                     name: "Lambda Ops",
                     members: [
                         { name: "Director Flux", isLeader: true, role: "tank" },
@@ -1608,6 +1876,153 @@
                         { name: "Vector", isLeader: false, role: "dps" },
                         { name: "Prism", isLeader: false, role: "healer" },
                         { name: "Nexus", isLeader: false, role: "healer" }
+                    ]
+                },
+                
+                // ============================================
+                // TAG 2 - FORMAÇÃO SECUNDÁRIA (Times 12-22)
+                // ============================================
+                {
+                    id: 12,
+                    tag: "tag2",
+                    name: "Alpha Reserve",
+                    members: [
+                        { name: "Commander Zeta II", isLeader: true, role: "tank" },
+                        { name: "Ghost Rider II", isLeader: false, role: "dps" },
+                        { name: "Phoenix II", isLeader: false, role: "healer" },
+                        { name: "Shadow II", isLeader: false, role: "dps" },
+                        { name: "Storm II", isLeader: false, role: "dps" },
+                        { name: "Viper II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 13,
+                    tag: "tag2",
+                    name: "Beta Reserve",
+                    members: [
+                        { name: "Captain Nova II", isLeader: true, role: "tank" },
+                        { name: "Thunder II", isLeader: false, role: "dps" },
+                        { name: "Blaze II", isLeader: false, role: "dps" },
+                        { name: "Frost II", isLeader: false, role: "healer" },
+                        { name: "Echo II", isLeader: false, role: "healer" },
+                        { name: "Razor II", isLeader: false, role: "dps" }
+                    ]
+                },
+                {
+                    id: 14,
+                    tag: "tag2",
+                    name: "Gamma Reserve",
+                    members: [
+                        { name: "Titan Prime II", isLeader: true, role: "tank" },
+                        { name: "Wraith II", isLeader: false, role: "dps" },
+                        { name: "Striker II", isLeader: false, role: "dps" },
+                        { name: "Cobra II", isLeader: false, role: "dps" },
+                        { name: "Falcon II", isLeader: false, role: "healer" },
+                        { name: "Raven II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 15,
+                    tag: "tag2",
+                    name: "Delta Reserve",
+                    members: [
+                        { name: "Overlord Ace II", isLeader: true, role: "tank" },
+                        { name: "Spartan II", isLeader: false, role: "tank" },
+                        { name: "Hunter II", isLeader: false, role: "dps" },
+                        { name: "Reaper II", isLeader: false, role: "dps" },
+                        { name: "Phantom II", isLeader: false, role: "dps" },
+                        { name: "Maverick II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 16,
+                    tag: "tag2",
+                    name: "Epsilon Reserve",
+                    members: [
+                        { name: "Major Nexus II", isLeader: true, role: "tank" },
+                        { name: "Tempest II", isLeader: false, role: "dps" },
+                        { name: "Ranger II", isLeader: false, role: "dps" },
+                        { name: "Sentinel II", isLeader: false, role: "tank" },
+                        { name: "Valkyrie II", isLeader: false, role: "healer" },
+                        { name: "Cipher II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 17,
+                    tag: "tag2",
+                    name: "Zeta Reserve",
+                    members: [
+                        { name: "Chief Omega II", isLeader: true, role: "tank" },
+                        { name: "Spectre II", isLeader: false, role: "dps" },
+                        { name: "Fury II", isLeader: false, role: "dps" },
+                        { name: "Atlas II", isLeader: false, role: "tank" },
+                        { name: "Onyx II", isLeader: false, role: "dps" },
+                        { name: "Volt II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 18,
+                    tag: "tag2",
+                    name: "Eta Reserve",
+                    members: [
+                        { name: "General Apex II", isLeader: true, role: "tank" },
+                        { name: "Kraken II", isLeader: false, role: "tank" },
+                        { name: "Hydra II", isLeader: false, role: "dps" },
+                        { name: "Zeus II", isLeader: false, role: "dps" },
+                        { name: "Hades II", isLeader: false, role: "dps" },
+                        { name: "Poseidon II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 19,
+                    tag: "tag2",
+                    name: "Theta Reserve",
+                    members: [
+                        { name: "Colonel Vertex II", isLeader: true, role: "tank" },
+                        { name: "Rocket II", isLeader: false, role: "dps" },
+                        { name: "Dash II", isLeader: false, role: "dps" },
+                        { name: "Nitro II", isLeader: false, role: "dps" },
+                        { name: "Turbo II", isLeader: false, role: "dps" },
+                        { name: "Jet II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 20,
+                    tag: "tag2",
+                    name: "Iota Reserve",
+                    members: [
+                        { name: "Marshal Eclipse II", isLeader: true, role: "tank" },
+                        { name: "Orion II", isLeader: false, role: "dps" },
+                        { name: "Nebula II", isLeader: false, role: "healer" },
+                        { name: "Cosmos II", isLeader: false, role: "dps" },
+                        { name: "Astro II", isLeader: false, role: "dps" },
+                        { name: "Quasar II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 21,
+                    tag: "tag2",
+                    name: "Kappa Reserve",
+                    members: [
+                        { name: "Warden Pulse II", isLeader: true, role: "tank" },
+                        { name: "Guardian II", isLeader: false, role: "tank" },
+                        { name: "Defender II", isLeader: false, role: "tank" },
+                        { name: "Bulwark II", isLeader: false, role: "dps" },
+                        { name: "Bastion II", isLeader: false, role: "healer" },
+                        { name: "Shield II", isLeader: false, role: "healer" }
+                    ]
+                },
+                {
+                    id: 22,
+                    tag: "tag2",
+                    name: "Lambda Reserve",
+                    members: [
+                        { name: "Director Flux II", isLeader: true, role: "tank" },
+                        { name: "Chaos II", isLeader: false, role: "dps" },
+                        { name: "Matrix II", isLeader: false, role: "dps" },
+                        { name: "Vector II", isLeader: false, role: "dps" },
+                        { name: "Prism II", isLeader: false, role: "healer" },
+                        { name: "Nexus II", isLeader: false, role: "healer" }
                     ]
                 }
             ]);
@@ -1631,6 +2046,19 @@
             const [feudItems, setFeudItems] = useState([]);
             const [feudName, setFeudName] = useState('');
             const [feudNumber, setFeudNumber] = useState('');
+            const [activeTag, setActiveTag] = useState('tag1'); // Controla qual tag está ativa
+            
+            // Estados para Cronograma
+            const [showCronograma, setShowCronograma] = useState(false);
+            const [cronogramaEvents, setCronogramaEvents] = useState({
+                'Segunda': [],
+                'Terça': [],
+                'Quarta': [],
+                'Quinta': [],
+                'Sexta': [],
+                'Sábado': [],
+                'Domingo': []
+            });
 
             // ============================================================
             // 🔐 CONFIGURAÇÃO DAS SENHAS
@@ -1645,7 +2073,8 @@
 
             // Carregar dados do Firebase
             useEffect(() => {
-                loadFromDatabase();
+                // TEMPORARIAMENTE DESABILITADO - para não sobrescrever times novos
+                // loadFromDatabase();
                 checkSession();
             }, []);
 
@@ -2189,7 +2618,7 @@
                                 </button>
                             </form>
                             
-                            <p className="login-hint">🔒 Acesso restrito aos membros</p>
+                            <p className="login-hint">Acesso restrito aos membros</p>
                         </div>
                     </div>
 
@@ -2198,7 +2627,7 @@
                         {/* Botão Admin no canto superior esquerdo */}
                         <div className="admin-button-container">
                             <button className="admin-btn" onClick={openChangePasswordModal}>
-                                🔑 Alterar Senha
+                                Alterar Senha
                             </button>
                         </div>
 
@@ -2207,13 +2636,13 @@
                                     className={`action-btn ${isEditMode ? 'edit-mode' : ''}`}
                                     onClick={toggleEditMode}
                                 >
-                                    {isEditMode ? '🔒 Concluir Edição' : '🔓 Editar Time'}
+                                    {isEditMode ? 'Concluir Edição' : 'Editar Time'}
                                 </button>
                                 <button 
                                     className={`action-btn ${hasUnsavedChanges ? 'has-changes' : ''}`}
                                     onClick={saveToDatabase}
                                 >
-                                    {hasUnsavedChanges ? '💾 Salvar Alterações' : 'Salvar Configuração'}
+                                    {hasUnsavedChanges ? 'Salvar Alterações' : 'Salvar Configuração'}
                                 </button>
                                 <button className="action-btn" onClick={exportTable}>
                                     Exportar Imagem
@@ -2222,7 +2651,7 @@
                                     FEUD
                                 </button>
                                 <button className="action-btn" onClick={handleLogout}>
-                                    🚪 Sair
+                                    Sair
                                 </button>
                             </div>
 
@@ -2235,15 +2664,31 @@
                             <div className={`info-banner ${isEditMode ? 'edit-mode' : ''}`}>
                                 <p>
                                     {isEditMode ? (
-                                        <><strong>🔓 MODO DE EDIÇÃO ATIVO!</strong> Clique em membros para editar nome/role/líder. Arraste para mover entre times. Clique em "Concluir" quando terminar.</>
+                                        <><strong>MODO DE EDIÇÃO ATIVO!</strong> Clique em membros para editar nome/role/líder. Arraste para mover entre times. Clique em "Concluir" quando terminar.</>
                                     ) : (
-                                        <><strong>🔒 Modo Bloqueado:</strong> Clique em "Editar Time" para ativar o modo de edição e poder editar nomes, roles e mover membros entre times.</>
+                                        <><strong>Modo Bloqueado:</strong> Clique em "Editar Time" para ativar o modo de edição e poder editar nomes, roles e mover membros entre times.</>
                                     )}
                                 </p>
                             </div>
                             
+                            {/* BOTÕES DE TAG */}
+                            <div className="tag-buttons-container">
+                                <button 
+                                    className={`tag-btn ${activeTag === 'tag1' ? 'active' : ''}`}
+                                    onClick={() => setActiveTag('tag1')}
+                                >
+                                    TAG 1
+                                </button>
+                                <button 
+                                    className={`tag-btn ${activeTag === 'tag2' ? 'active' : ''}`}
+                                    onClick={() => setActiveTag('tag2')}
+                                >
+                                    TAG 2
+                                </button>
+                            </div>
+                            
                             <div className="teams-grid">
-                                {teams.map((team) => (
+                                {teams.filter(team => team.tag === activeTag).map((team) => (
                                     <div 
                                         key={team.id} 
                                         className={`team-card ${isEditMode ? 'edit-mode' : ''}`}
@@ -2450,7 +2895,7 @@
                         <div className="change-password-overlay" onClick={closeChangePasswordModal}>
                             <div className="change-password-modal" onClick={(e) => e.stopPropagation()}>
                                 <div className="change-password-header">
-                                    <h3 className="change-password-title">🔑 Alterar Senha de Acesso</h3>
+                                    <h3 className="change-password-title">Alterar Senha de Acesso</h3>
                                     <button className="change-password-close" onClick={closeChangePasswordModal}>×</button>
                                 </div>
 
