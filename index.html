@@ -25,7 +25,26 @@
             box-sizing: border-box;
         }
 
+        /* Tema Escuro (Padrão) */
         :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --primary: #e5e5e5;
+            --secondary: #d5d5d5;
+            --accent: #bfbfbf;
+            --text: #f2f2f2;
+            --text-dim: #999999;
+            --card-bg: rgba(15, 15, 15, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --drag-over: rgba(255, 255, 255, 0.1);
+            --edit-mode: rgba(255, 140, 0, 0.1);
+            --healer: #00c853;
+            --dps: #ff4444;
+            --tank: #2196f3;
+        }
+
+        /* Tema Claro (Alternativo) */
+        body.light-mode {
             --bg-dark: #f5f5f5;
             --bg-darker: #ffffff;
             --primary: #1a1a1a;
@@ -151,14 +170,13 @@
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(3rem, 8vw, 7rem);
             font-weight: 900;
-            background: linear-gradient(135deg, #0d0d0d 0%, #2a2a2a 50%, #404040 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #e5e5e5 50%, #d5d5d5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             margin-bottom: 10px;
-            animation: glowPulse 3s ease-in-out infinite;
             position: relative;
             display: inline-block;
         }
@@ -168,13 +186,31 @@
             position: absolute;
             left: 0;
             top: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #e5e5e5 50%, #d5d5d5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(0px);
+            opacity: 0;
+            z-index: -1;
+        }
+
+        /* Logo preto no tema claro */
+        body.light-mode .logo {
+            background: linear-gradient(135deg, #0d0d0d 0%, #2a2a2a 50%, #404040 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        body.light-mode .logo::after {
             background: linear-gradient(135deg, #0d0d0d 0%, #2a2a2a 50%, #404040 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             filter: blur(20px);
             opacity: 0.3;
-            z-index: -1;
         }
 
         /* Logo simplificado para captura - usa color ao invés de background-clip */
@@ -1491,210 +1527,351 @@
         /* CRONOGRAMA */
         /* ========================================== */
         
-        .cronograma-container {
+        /* ========================================== */
+        /* ESTATÍSTICAS E FILTROS */
+        /* ========================================== */
+        
+        .stats-and-filters-container {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 1400px;
-        }
-
-        .cronograma-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .cronograma-title {
-            font-size: 2rem;
-            color: var(--primary);
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 10px;
-        }
-
-        .cronograma-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .day-card {
-            background: rgba(0, 0, 0, 0.3);
             border: 2px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .statistics-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .stats-title {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--card-border);
             transition: all 0.3s ease;
         }
 
-        .day-card:hover {
+        .stat-item:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
         }
 
-        .day-name {
-            font-size: 1.3rem;
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
             color: var(--primary);
             font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text);
             text-transform: uppercase;
-            margin-bottom: 15px;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--card-border);
+            margin-top: 5px;
+            opacity: 0.8;
         }
 
-        .events-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .filter-section {
+            flex: 1;
+            min-width: 300px;
         }
 
-        .event-item {
+        .filter-title {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--bg-darker);
+            border-color: var(--primary);
+        }
+
+        .filter-btn.active:hover {
+            background: var(--text);
+            transform: translateY(-3px);
+        }
+
+        /* ========================================== */
+        /* TOGGLE DE TEMA */
+        /* ========================================== */
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9998;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle-icon {
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ========================================== */
+        /* CAMPOS EXTRAS NO MODAL */
+        /* ========================================== */
+        
+        .notes-field {
+            margin-top: 15px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .presence-field {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .presence-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .presence-label {
+            font-size: 1rem;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .presence-status {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .presence-status.present {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .presence-status.absent {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6666;
+        }
+
+        /* ========================================== */
+        /* HISTÓRICO */
+        /* ========================================== */
+
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .history-item {
             background: rgba(255, 255, 255, 0.05);
             border-left: 3px solid var(--primary);
             padding: 12px;
             margin-bottom: 10px;
             border-radius: 6px;
-            position: relative;
-            transition: all 0.2s ease;
         }
 
-        .event-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(5px);
-        }
-
-        .event-time {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .event-name {
-            font-size: 1rem;
-            color: var(--text);
-            margin-bottom: 5px;
-        }
-
-        .event-points {
+        .history-timestamp {
             font-size: 0.85rem;
-            color: #ffd700;
-            font-weight: bold;
+            color: var(--text-dim);
+            margin-bottom: 5px;
         }
 
-        .event-delete {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #ff4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s;
+        .history-action {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 3px;
         }
 
-        .event-item:hover .event-delete {
-            opacity: 1;
-        }
-
-        .event-delete:hover {
-            background: #cc0000;
-        }
-
-        .add-event-form {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px dashed var(--card-border);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 10px;
-        }
-
-        .add-event-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--card-border);
-            border-radius: 6px;
-            padding: 10px;
-            margin-bottom: 10px;
+        .history-details {
+            font-size: 0.9rem;
             color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
         }
 
-        .add-event-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.15);
+        .history-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
         }
 
-        .add-event-btn {
-            width: 100%;
-            padding: 10px;
-            background: var(--primary);
-            color: var(--bg-darker);
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+        /* ========================================== */
+        /* BACKUP */
+        /* ========================================== */
 
-        .add-event-btn:hover {
-            background: var(--text);
-            transform: translateY(-2px);
-        }
-
-        .cronograma-actions {
+        .backup-options {
             display: flex;
+            flex-direction: column;
             gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
+            padding: 20px 0;
         }
 
-        .cronograma-action-btn {
-            padding: 15px 40px;
+        .backup-btn {
+            padding: 15px 20px;
             background: var(--primary);
             color: var(--bg-darker);
             border: 2px solid var(--primary);
             border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            text-align: center;
         }
 
-        .cronograma-action-btn:hover {
+        .backup-btn:hover {
             background: transparent;
             color: var(--primary);
             transform: translateY(-2px);
         }
 
-        .cronograma-action-btn.secondary {
+        .backup-btn.secondary {
             background: transparent;
             color: var(--text);
             border-color: var(--card-border);
         }
 
-        .cronograma-action-btn.secondary:hover {
+        .backup-btn.secondary:hover {
             border-color: var(--primary);
             color: var(--primary);
         }
+
+        .backup-input {
+            display: none;
+        }
+
+        /* ========================================== */
+        /* MODAL DE OPÇÕES */
+        /* ========================================== */
+
+        .options-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px 0;
+        }
+
+        .option-btn {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .option-icon {
+            font-size: 1.3rem;
+            width: 30px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -2047,19 +2224,14 @@
             const [feudName, setFeudName] = useState('');
             const [feudNumber, setFeudNumber] = useState('');
             const [activeTag, setActiveTag] = useState('tag1'); // Controla qual tag está ativa
+            const [roleFilter, setRoleFilter] = useState('all'); // Filtro de roles: 'all', 'tank', 'dps', 'healer'
+            const [showStatsModal, setShowStatsModal] = useState(false); // Controla modal de estatísticas/filtros
+            const [darkMode, setDarkMode] = useState(true); // Controla tema claro/escuro (false = escuro, true = claro)
+            const [history, setHistory] = useState([]); // Histórico de mudanças
+            const [showHistoryModal, setShowHistoryModal] = useState(false); // Modal de histórico
+            const [showBackupModal, setShowBackupModal] = useState(false); // Modal de backup
+            const [showOptionsModal, setShowOptionsModal] = useState(false); // Modal de opções
             
-            // Estados para Cronograma
-            const [showCronograma, setShowCronograma] = useState(false);
-            const [cronogramaEvents, setCronogramaEvents] = useState({
-                'Segunda': [],
-                'Terça': [],
-                'Quarta': [],
-                'Quinta': [],
-                'Sexta': [],
-                'Sábado': [],
-                'Domingo': []
-            });
-
             // ============================================================
             // 🔐 CONFIGURAÇÃO DAS SENHAS
             // ============================================================
@@ -2077,6 +2249,28 @@
                 // loadFromDatabase();
                 checkSession();
             }, []);
+
+            // Inicializar campos de notas e presença nos membros
+            useEffect(() => {
+                const updatedTeams = teams.map(team => ({
+                    ...team,
+                    members: team.members.map(member => ({
+                        ...member,
+                        notes: member.notes || '',
+                        isPresent: member.isPresent !== undefined ? member.isPresent : true
+                    }))
+                }));
+                setTeams(updatedTeams);
+            }, []); // Roda apenas uma vez no início
+
+            // Controlar tema claro/escuro
+            useEffect(() => {
+                if (darkMode) {
+                    document.body.classList.add('light-mode');
+                } else {
+                    document.body.classList.remove('light-mode');
+                }
+            }, [darkMode]);
 
             const checkSession = () => {
                 const session = sessionStorage.getItem('guilda-rise-auth');
@@ -2270,6 +2464,102 @@
                 }
             };
 
+            // ============================================
+            // FUNÇÕES DE HISTÓRICO
+            // ============================================
+
+            const addToHistory = (action, details) => {
+                const timestamp = new Date().toLocaleString('pt-BR');
+                const newEntry = {
+                    id: Date.now(),
+                    timestamp,
+                    action,
+                    details
+                };
+                setHistory(prev => [newEntry, ...prev].slice(0, 50)); // Mantém últimas 50 entradas
+            };
+
+            // ============================================
+            // FUNÇÕES DE BACKUP/RESTORE
+            // ============================================
+
+            const exportBackup = () => {
+                try {
+                    const backup = {
+                        version: '1.0',
+                        timestamp: new Date().toISOString(),
+                        data: {
+                            teams,
+                            history,
+                            feudItems
+                        }
+                    };
+
+                    const json = JSON.stringify(backup, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `guilda-rise-backup-${new Date().toISOString().split('T')[0]}.json`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    
+                    showNotification('✅ Backup exportado com sucesso!');
+                    addToHistory('Backup Exportado', 'Configuração completa exportada');
+                } catch (error) {
+                    showNotification('❌ Erro ao exportar backup');
+                    console.error(error);
+                }
+            };
+
+            const importBackup = (file) => {
+                try {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const backup = JSON.parse(e.target.result);
+                            
+                            if (backup.data && backup.data.teams) {
+                                setTeams(backup.data.teams);
+                                if (backup.data.history) setHistory(backup.data.history);
+                                if (backup.data.feudItems) setFeudItems(backup.data.feudItems);
+                                
+                                setHasUnsavedChanges(true);
+                                showNotification('✅ Backup restaurado! Clique em Salvar para persistir.');
+                                addToHistory('Backup Importado', `Restaurado de ${backup.timestamp}`);
+                                setShowBackupModal(false);
+                            } else {
+                                showNotification('❌ Arquivo de backup inválido');
+                            }
+                        } catch (error) {
+                            showNotification('❌ Erro ao ler arquivo de backup');
+                            console.error(error);
+                        }
+                    };
+                    reader.readAsText(file);
+                } catch (error) {
+                    showNotification('❌ Erro ao importar backup');
+                    console.error(error);
+                }
+            };
+
+            // Função para calcular estatísticas dos membros
+            const getStatistics = () => {
+                const activeTeams = teams.filter(team => team.tag === activeTag);
+                let stats = { total: 0, tank: 0, dps: 0, healer: 0 };
+                
+                activeTeams.forEach(team => {
+                    team.members.forEach(member => {
+                        stats.total++;
+                        if (member.role === 'tank') stats.tank++;
+                        else if (member.role === 'dps') stats.dps++;
+                        else if (member.role === 'healer') stats.healer++;
+                    });
+                });
+                
+                return stats;
+            };
+
             const loadFromDatabase = async () => {
                 if (!db) return;
 
@@ -2367,6 +2657,7 @@
                 setEditMemberModal(null);
                 setHasUnsavedChanges(true);
                 showNotification('✅ Membro atualizado! Clique em "Salvar" para gravar.');
+                addToHistory('Membro Editado', `${member.name} - ${member.role}`);
             };
 
             // Abrir modal de edição de time
@@ -2589,10 +2880,26 @@
                 setTeams(updatedTeams);
                 setHasUnsavedChanges(true);
                 showNotification(`✅ ${draggedMember.name} movido! Clique em "Salvar".`);
+                
+                // Registrar no histórico
+                const fromTeam = teams.find(t => t.id === draggedFromTeam);
+                const toTeam = teams.find(t => t.id === targetTeamId);
+                addToHistory(
+                    'Membro Movido entre Times',
+                    `${draggedMember.name} movido de "${fromTeam?.name}" para "${toTeam?.name}"`
+                );
             };
 
             return (
                 <>
+                    {/* TOGGLE DE TEMA */}
+                    {isAuthenticated && (
+                        <div className="theme-toggle" onClick={() => setDarkMode(!darkMode)}>
+                            <span className="theme-toggle-icon">{darkMode ? '☀️' : '🌙'}</span>
+                            <span className="theme-toggle-text">{darkMode ? 'Claro' : 'Escuro'}</span>
+                        </div>
+                    )}
+
                     {/* TELA DE LOGIN */}
                     <div className={`login-overlay ${isAuthenticated ? 'hidden' : ''}`}>
                         <div className="login-box">
@@ -2624,13 +2931,6 @@
 
                     {/* CONTEÚDO PRINCIPAL */}
                     <div className="container">
-                        {/* Botão Admin no canto superior esquerdo */}
-                        <div className="admin-button-container">
-                            <button className="admin-btn" onClick={openChangePasswordModal}>
-                                Alterar Senha
-                            </button>
-                        </div>
-
                         <div className="action-buttons">
                                 <button 
                                     className={`action-btn ${isEditMode ? 'edit-mode' : ''}`}
@@ -2647,8 +2947,14 @@
                                 <button className="action-btn" onClick={exportTable}>
                                     Exportar Imagem
                                 </button>
+                                <button className="action-btn" onClick={() => setShowStatsModal(true)}>
+                                    Estatísticas
+                                </button>
                                 <button className="action-btn" onClick={openFeudModal}>
                                     FEUD
+                                </button>
+                                <button className="action-btn" onClick={() => setShowOptionsModal(true)}>
+                                    Opções
                                 </button>
                                 <button className="action-btn" onClick={handleLogout}>
                                     Sair
@@ -2687,6 +2993,8 @@
                                 </button>
                             </div>
                             
+                            {/* ESTATÍSTICAS E FILTROS */}
+                            
                             <div className="teams-grid">
                                 {teams.filter(team => team.tag === activeTag).map((team) => (
                                     <div 
@@ -2709,11 +3017,15 @@
                                         </div>
                                         
                                         <ul className="members-list">
-                                            {team.members.map((member, index) => (
+                                            {team.members
+                                                .filter(member => roleFilter === 'all' || member.role === roleFilter)
+                                                .map((member, index) => {
+                                                    const originalIndex = team.members.indexOf(member);
+                                                    return (
                                                 <li 
-                                                    key={`${team.id}-${index}`}
+                                                    key={`${team.id}-${originalIndex}`}
                                                     className={`member-item ${member.isLeader ? 'leader' : ''} ${isEditMode ? 'editable' : ''}`}
-                                                    onClick={() => openMemberEdit(team.id, index)}
+                                                    onClick={() => openMemberEdit(team.id, originalIndex)}
                                                     title={isEditMode ? "Clique para editar ou arraste ⋮⋮ para mover" : "Ative o modo de edição para editar"}
                                                 >
                                                     <span 
@@ -2741,7 +3053,7 @@
                                                         </span>
                                                     </div>
                                                 </li>
-                                            ))}
+                                            )})}
                                         </ul>
                                     </div>
                                 ))}
@@ -2814,6 +3126,41 @@
                                                 🛡️ Tank
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Campo de Presença */}
+                                    <div className="form-group">
+                                        <div className="presence-field">
+                                            <input 
+                                                type="checkbox"
+                                                className="presence-checkbox"
+                                                checked={editMemberModal.member.isPresent !== false}
+                                                onChange={(e) => setEditMemberModal({
+                                                    ...editMemberModal,
+                                                    member: { ...editMemberModal.member, isPresent: e.target.checked }
+                                                })}
+                                            />
+                                            <label className="presence-label">
+                                                Membro Presente
+                                            </label>
+                                            <span className={`presence-status ${editMemberModal.member.isPresent !== false ? 'present' : 'absent'}`}>
+                                                {editMemberModal.member.isPresent !== false ? 'Presente' : 'Ausente'}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Campo de Notas */}
+                                    <div className="form-group notes-field">
+                                        <label className="form-label">Observações / Notas</label>
+                                        <textarea 
+                                            className="notes-textarea"
+                                            value={editMemberModal.member.notes || ''}
+                                            onChange={(e) => setEditMemberModal({
+                                                ...editMemberModal,
+                                                member: { ...editMemberModal.member, notes: e.target.value }
+                                            })}
+                                            placeholder="Adicione observações sobre este membro (opcional)..."
+                                        />
                                     </div>
 
                                     <div className="form-group">
@@ -3023,6 +3370,219 @@
                                     </button>
                                     <button className="feud-action-btn danger" onClick={clearAllFeudItems}>
                                         🗑️ Limpar Tudo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE ESTATÍSTICAS E FILTROS */}
+                    {showStatsModal && (
+                        <div className="modal-overlay" onClick={() => setShowStatsModal(false)}>
+                            <div className="modal" style={{maxWidth: '800px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Estatísticas e Filtros - {activeTag === 'tag1' ? 'TAG 1' : 'TAG 2'}</h2>
+                                    <button className="close-btn" onClick={() => setShowStatsModal(false)}>×</button>
+                                </div>
+                                
+                                <div style={{padding: '20px'}}>
+                                    {/* Estatísticas */}
+                                    <div className="statistics-section" style={{marginBottom: '30px'}}>
+                                        <div className="stats-title">Estatísticas</div>
+                                        <div className="stats-grid">
+                                            <div className="stat-item">
+                                                <div className="stat-value">{getStatistics().total}</div>
+                                                <div className="stat-label">Total</div>
+                                            </div>
+                                            <div className="stat-item">
+                                                <div className="stat-value">{getStatistics().tank}</div>
+                                                <div className="stat-label">Tanks</div>
+                                            </div>
+                                            <div className="stat-item">
+                                                <div className="stat-value">{getStatistics().dps}</div>
+                                                <div className="stat-label">DPS</div>
+                                            </div>
+                                            <div className="stat-item">
+                                                <div className="stat-value">{getStatistics().healer}</div>
+                                                <div className="stat-label">Healers</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Filtros por Role */}
+                                    <div className="filter-section">
+                                        <div className="filter-title">Filtrar Visualização por Role</div>
+                                        <div className="filter-buttons">
+                                            <button 
+                                                className={`filter-btn ${roleFilter === 'all' ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setRoleFilter('all');
+                                                    setShowStatsModal(false);
+                                                }}
+                                            >
+                                                Todos
+                                            </button>
+                                            <button 
+                                                className={`filter-btn ${roleFilter === 'tank' ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setRoleFilter('tank');
+                                                    setShowStatsModal(false);
+                                                }}
+                                            >
+                                                Tanks
+                                            </button>
+                                            <button 
+                                                className={`filter-btn ${roleFilter === 'dps' ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setRoleFilter('dps');
+                                                    setShowStatsModal(false);
+                                                }}
+                                            >
+                                                DPS
+                                            </button>
+                                            <button 
+                                                className={`filter-btn ${roleFilter === 'healer' ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    setRoleFilter('healer');
+                                                    setShowStatsModal(false);
+                                                }}
+                                            >
+                                                Healers
+                                            </button>
+                                        </div>
+                                        {roleFilter !== 'all' && (
+                                            <p style={{marginTop: '15px', color: '#ffd700', textAlign: 'center', fontSize: '0.9rem'}}>
+                                                ⚠️ Filtro ativo: mostrando apenas <strong>{roleFilter === 'tank' ? 'Tanks' : roleFilter === 'dps' ? 'DPS' : 'Healers'}</strong>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE HISTÓRICO */}
+                    {showHistoryModal && (
+                        <div className="modal-overlay" onClick={() => setShowHistoryModal(false)}>
+                            <div className="modal" style={{maxWidth: '700px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Histórico de Mudanças</h2>
+                                    <button className="close-btn" onClick={() => setShowHistoryModal(false)}>×</button>
+                                </div>
+                                
+                                <div style={{padding: '20px'}}>
+                                    {history.length === 0 ? (
+                                        <div className="history-empty">
+                                            📋 Nenhuma mudança registrada ainda
+                                        </div>
+                                    ) : (
+                                        <div className="history-list">
+                                            {history.map(entry => (
+                                                <div key={entry.id} className="history-item">
+                                                    <div className="history-timestamp">{entry.timestamp}</div>
+                                                    <div className="history-action">{entry.action}</div>
+                                                    <div className="history-details">{entry.details}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="modal-actions">
+                                    <button className="modal-btn" onClick={() => setShowHistoryModal(false)}>
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE BACKUP */}
+                    {showBackupModal && (
+                        <div className="modal-overlay" onClick={() => setShowBackupModal(false)}>
+                            <div className="modal" style={{maxWidth: '500px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Backup & Restore</h2>
+                                    <button className="close-btn" onClick={() => setShowBackupModal(false)}>×</button>
+                                </div>
+                                
+                                <div className="backup-options">
+                                    <button className="backup-btn" onClick={exportBackup}>
+                                        📥 Exportar Backup (JSON)
+                                    </button>
+                                    
+                                    <label className="backup-btn secondary">
+                                        📤 Importar Backup
+                                        <input 
+                                            type="file" 
+                                            accept=".json"
+                                            className="backup-input"
+                                            onChange={(e) => {
+                                                if (e.target.files[0]) {
+                                                    importBackup(e.target.files[0]);
+                                                    e.target.value = '';
+                                                }
+                                            }}
+                                        />
+                                    </label>
+                                </div>
+
+                                <div className="modal-actions" style={{marginTop: '20px'}}>
+                                    <button className="modal-btn secondary" onClick={() => setShowBackupModal(false)}>
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE OPÇÕES */}
+                    {showOptionsModal && (
+                        <div className="modal-overlay" onClick={() => setShowOptionsModal(false)}>
+                            <div className="modal" style={{maxWidth: '450px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Opções</h2>
+                                    <button className="close-btn" onClick={() => setShowOptionsModal(false)}>×</button>
+                                </div>
+                                
+                                <div className="options-menu">
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowOptionsModal(false);
+                                            setShowHistoryModal(true);
+                                        }}
+                                    >
+                                        <span className="option-icon">📋</span>
+                                        <span>Histórico de Mudanças</span>
+                                    </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowOptionsModal(false);
+                                            setShowBackupModal(true);
+                                        }}
+                                    >
+                                        <span className="option-icon">💾</span>
+                                        <span>Backup & Restore</span>
+                                    </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowOptionsModal(false);
+                                            openChangePasswordModal();
+                                        }}
+                                    >
+                                        <span className="option-icon">🔑</span>
+                                        <span>Alterar Senha</span>
+                                    </button>
+                                </div>
+
+                                <div className="modal-actions" style={{marginTop: '20px'}}>
+                                    <button className="modal-btn secondary" onClick={() => setShowOptionsModal(false)}>
+                                        Fechar
                                     </button>
                                 </div>
                             </div>
