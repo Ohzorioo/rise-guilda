@@ -15,6 +15,9 @@
     <!-- html2canvas para captura de tela -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
@@ -395,6 +398,24 @@
             color: var(--primary);
         }
 
+        .back-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: var(--bg-darker);
+        }
+
         .modal-content {
             margin-bottom: 20px;
         }
@@ -680,6 +701,51 @@
             cursor: default;
         }
 
+        .member-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+        
+        .member-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .member-bottom-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .member-name {
+            font-size: 1rem;
+            font-weight: 400;
+            pointer-events: none;
+        }
+        
+        .leader-crown {
+            font-size: 1.1rem;
+            margin-left: 6px;
+            display: inline-block;
+            animation: crownGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+        }
+        
+        @keyframes crownGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8));
+                transform: scale(1.05);
+            }
+        }
+
         .member-item.editable {
             cursor: pointer;
         }
@@ -704,7 +770,12 @@
         }
 
         .member-item.leader:hover {
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.16));
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.12), 
+                rgba(255, 223, 77, 0.18), 
+                rgba(255, 215, 0, 0.12)
+            );
+            box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.1);
         }
 
         .member-item.editable:hover {
@@ -713,14 +784,25 @@
         }
 
         .member-item.leader.editable:hover {
-            background: linear-gradient(90deg, rgba(255, 140, 0, 0.08), rgba(255, 140, 0, 0.12));
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.15), 
+                rgba(255, 223, 77, 0.22), 
+                rgba(255, 215, 0, 0.15)
+            );
+            border-left-color: #FFD700;
+            box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.15);
         }
 
         .member-item.leader {
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.12));
-            border-left-color: var(--primary);
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.08), 
+                rgba(255, 223, 77, 0.12), 
+                rgba(255, 215, 0, 0.08)
+            );
+            border-left-color: #FFD700;
             border-left-width: 4px;
             position: relative;
+            box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.05);
         }
 
         .badges-container {
@@ -1482,47 +1564,6 @@
         /* BOTÕES DE TAG */
         /* ========================================== */
         
-        .tag-buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-            padding: 20px;
-        }
-
-        .tag-btn {
-            padding: 15px 40px;
-            background: var(--card-bg);
-            border: 3px solid var(--card-border);
-            color: var(--text);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 150px;
-        }
-
-        .tag-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .tag-btn.active {
-            background: var(--primary);
-            color: var(--bg-darker);
-            border-color: var(--primary);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .tag-btn.active:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-
         /* ========================================== */
         /* CRONOGRAMA */
         /* ========================================== */
@@ -1748,6 +1789,258 @@
         }
 
         /* ========================================== */
+        /* BADGE DE CLASSE */
+        /* ========================================== */
+
+        .classe-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 6px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .classe-name-display {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            border: 2px solid;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        /* ========================================== */
+        /* CORES DAS CLASSES - TANKS (AZUIS) */
+        /* ========================================== */
+
+        .classe-Crusader {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.25), rgba(74, 144, 226, 0.15));
+            border-color: rgba(74, 144, 226, 0.6);
+            color: #4A90E2;
+        }
+
+        .classe-Templar {
+            background: linear-gradient(135deg, rgba(46, 92, 138, 0.25), rgba(46, 92, 138, 0.15));
+            border-color: rgba(46, 92, 138, 0.6);
+            color: #2E5C8A;
+        }
+
+        .classe-Protector {
+            background: linear-gradient(135deg, rgba(106, 183, 255, 0.25), rgba(106, 183, 255, 0.15));
+            border-color: rgba(106, 183, 255, 0.6);
+            color: #6AB7FF;
+        }
+
+        .classe-Berserker {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.25), rgba(30, 58, 95, 0.15));
+            border-color: rgba(30, 58, 95, 0.6);
+            color: #3D7AB8;
+        }
+
+        .classe-Follower {
+            background: linear-gradient(135deg, rgba(95, 163, 208, 0.25), rgba(95, 163, 208, 0.15));
+            border-color: rgba(95, 163, 208, 0.6);
+            color: #5FA3D0;
+        }
+
+        .classe-Steelheart {
+            background: linear-gradient(135deg, rgba(61, 122, 184, 0.25), rgba(61, 122, 184, 0.15));
+            border-color: rgba(61, 122, 184, 0.6);
+            color: #3D7AB8;
+        }
+
+        .classe-Plunderer {
+            background: linear-gradient(135deg, rgba(128, 200, 255, 0.25), rgba(128, 200, 255, 0.15));
+            border-color: rgba(128, 200, 255, 0.6);
+            color: #80C8FF;
+        }
+
+        /* ========================================== */
+        /* CORES DAS CLASSES - HEALERS (VERDES) */
+        /* ========================================== */
+
+        .classe-Seeker {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.25), rgba(76, 175, 80, 0.15));
+            border-color: rgba(76, 175, 80, 0.6);
+            color: #4CAF50;
+        }
+
+        .classe-Paladin {
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.25), rgba(46, 125, 50, 0.15));
+            border-color: rgba(46, 125, 50, 0.6);
+            color: #2E7D32;
+        }
+
+        .classe-Summoner {
+            background: linear-gradient(135deg, rgba(102, 187, 106, 0.25), rgba(102, 187, 106, 0.15));
+            border-color: rgba(102, 187, 106, 0.6);
+            color: #66BB6A;
+        }
+
+        .classe-Wrath {
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.25), rgba(27, 94, 32, 0.15));
+            border-color: rgba(27, 94, 32, 0.6);
+            color: #43A047;
+        }
+
+        .classe-Void.Lance, .classe-VoidLance {
+            background: linear-gradient(135deg, rgba(129, 199, 132, 0.25), rgba(129, 199, 132, 0.15));
+            border-color: rgba(129, 199, 132, 0.6);
+            color: #81C784;
+        }
+
+        /* ========================================== */
+        /* CORES DAS CLASSES - DPS MELEE (LARANJAS) */
+        /* ========================================== */
+
+        .classe-Devastator {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.25), rgba(255, 107, 53, 0.15));
+            border-color: rgba(255, 107, 53, 0.6);
+            color: #FF6B35;
+        }
+
+        .classe-Infiltrator {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.25), rgba(255, 140, 66, 0.15));
+            border-color: rgba(255, 140, 66, 0.6);
+            color: #FF8C42;
+        }
+
+        .classe-Spellblade {
+            background: linear-gradient(135deg, rgba(230, 81, 0, 0.25), rgba(230, 81, 0, 0.15));
+            border-color: rgba(230, 81, 0, 0.6);
+            color: #E65100;
+        }
+
+        .classe-Ranger {
+            background: linear-gradient(135deg, rgba(255, 158, 87, 0.25), rgba(255, 158, 87, 0.15));
+            border-color: rgba(255, 158, 87, 0.6);
+            color: #FF9E57;
+        }
+
+        .classe-Forerunner {
+            background: linear-gradient(135deg, rgba(216, 67, 21, 0.25), rgba(216, 67, 21, 0.15));
+            border-color: rgba(216, 67, 21, 0.6);
+            color: #D84315;
+        }
+
+        .classe-Gladiator {
+            background: linear-gradient(135deg, rgba(255, 179, 102, 0.25), rgba(255, 179, 102, 0.15));
+            border-color: rgba(255, 179, 102, 0.6);
+            color: #FFB366;
+        }
+
+        .classe-Shadow.Dancer, .classe-ShadowDancer {
+            background: linear-gradient(135deg, rgba(255, 112, 67, 0.25), rgba(255, 112, 67, 0.15));
+            border-color: rgba(255, 112, 67, 0.6);
+            color: #FF7043;
+        }
+
+        /* ========================================== */
+        /* CORES DAS CLASSES - DPS RANGED (VERMELHOS/ROSAS) */
+        /* ========================================== */
+
+        .classe-Scorpion {
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.25), rgba(233, 30, 99, 0.15));
+            border-color: rgba(233, 30, 99, 0.6);
+            color: #E91E63;
+        }
+
+        .classe-Scout {
+            background: linear-gradient(135deg, rgba(194, 24, 91, 0.25), rgba(194, 24, 91, 0.15));
+            border-color: rgba(194, 24, 91, 0.6);
+            color: #C2185B;
+        }
+
+        .classe-Cavalier {
+            background: linear-gradient(135deg, rgba(240, 98, 146, 0.25), rgba(240, 98, 146, 0.15));
+            border-color: rgba(240, 98, 146, 0.6);
+            color: #F06292;
+        }
+
+        .classe-Polearm {
+            background: linear-gradient(135deg, rgba(173, 20, 87, 0.25), rgba(173, 20, 87, 0.15));
+            border-color: rgba(173, 20, 87, 0.6);
+            color: #AD1457;
+        }
+
+        /* ========================================== */
+        /* CORES DAS CLASSES - DPS MÁGICO (ROXOS) */
+        /* ========================================== */
+
+        .classe-Guardian {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.25), rgba(156, 39, 176, 0.15));
+            border-color: rgba(156, 39, 176, 0.6);
+            color: #9C27B0;
+        }
+
+        .classe-Redeemer {
+            background: linear-gradient(135deg, rgba(123, 31, 162, 0.25), rgba(123, 31, 162, 0.15));
+            border-color: rgba(123, 31, 162, 0.6);
+            color: #7B1FA2;
+        }
+
+        .classe-Battlestitch {
+            background: linear-gradient(135deg, rgba(171, 71, 188, 0.25), rgba(171, 71, 188, 0.15));
+            border-color: rgba(171, 71, 188, 0.6);
+            color: #AB47BC;
+        }
+
+        .classe-Eradicator {
+            background: linear-gradient(135deg, rgba(106, 27, 154, 0.25), rgba(106, 27, 154, 0.15));
+            border-color: rgba(106, 27, 154, 0.6);
+            color: #6A1B9A;
+        }
+
+        .classe-Dark.Tormentor, .classe-DarkTormentor {
+            background: linear-gradient(135deg, rgba(186, 104, 200, 0.25), rgba(186, 104, 200, 0.15));
+            border-color: rgba(186, 104, 200, 0.6);
+            color: #BA68C8;
+        }
+
+        /* MODO CLARO - AJUSTES */
+        body.light-mode .classe-badge,
+        body.light-mode .classe-name-display {
+            filter: brightness(0.9) saturate(1.2);
+        }
+        
+        /* Líder no modo claro */
+        body.light-mode .member-item.leader {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.12), 
+                rgba(255, 235, 120, 0.18), 
+                rgba(255, 215, 0, 0.12)
+            );
+            box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.08);
+        }
+        
+        body.light-mode .member-item.leader:hover {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.18), 
+                rgba(255, 235, 120, 0.25), 
+                rgba(255, 215, 0, 0.18)
+            );
+            box-shadow: inset 0 0 25px rgba(255, 215, 0, 0.12);
+        }
+        
+        body.light-mode .member-item.leader.editable:hover {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.22), 
+                rgba(255, 235, 120, 0.30), 
+                rgba(255, 215, 0, 0.22)
+            );
+            box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.18);
+        }
+
+        /* ========================================== */
         /* HISTÓRICO */
         /* ========================================== */
 
@@ -1872,6 +2165,467 @@
             text-align: center;
         }
 
+        /* ========================================== */
+        /* MODAL DE CUSTOMIZAÇÃO DE CLASSES */
+        /* ========================================== */
+
+        .customize-classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px 0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .class-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .class-item-full {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .class-item-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .class-item-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--card-border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .class-item-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .weapon-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .weapon-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .weapon-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+        
+        .weapon-select {
+            width: 100%;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .weapon-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .weapon-select:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .weapon-icon-preview {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            align-self: center;
+            margin-top: 5px;
+            filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+        }
+        
+        .class-weapon-icons {
+            display: inline-flex;
+            gap: 4px;
+            margin-right: 6px;
+            align-items: center;
+        }
+        
+        .class-weapon-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
+        }
+        
+        .weapon-icons-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        
+        .weapon-icon-display {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+            transition: transform 0.2s ease;
+        }
+        
+        .weapon-icon-display:hover {
+            transform: scale(1.15);
+        }
+
+        /* ========================================== */
+        /* MODAL DE LISTA DE MEMBROS */
+        /* ========================================== */
+
+        .members-modal {
+            overflow-y: auto;
+        }
+
+        .members-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .members-search {
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .members-filter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--card-border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-select:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-select option,
+        .filter-select optgroup {
+            background: var(--bg-darker);
+            color: var(--text);
+        }
+
+        .leader-filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .leader-filter-checkbox:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        .leader-filter-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ffd700;
+        }
+
+        .leader-filter-checkbox span {
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .filter-clear-btn {
+            padding: 10px 20px;
+            background: rgba(255, 140, 0, 0.1);
+            border: 2px solid rgba(255, 140, 0, 0.3);
+            border-radius: 6px;
+            color: #ff8c00;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-clear-btn:hover {
+            background: rgba(255, 140, 0, 0.2);
+            border-color: #ff8c00;
+        }
+
+        .members-count {
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(var(--primary-rgb), 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .members-count strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .members-table-container {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+        }
+
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .members-table thead {
+            position: sticky;
+            top: 0;
+            background: var(--bg-darker);
+            z-index: 10;
+        }
+
+        .members-table th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--card-border);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.85rem;
+        }
+
+        .members-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text);
+        }
+
+        .members-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .members-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .members-table tbody tr.leader-row {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.05), 
+                rgba(255, 223, 77, 0.08), 
+                rgba(255, 215, 0, 0.05)
+            );
+        }
+
+        .members-table tbody tr.leader-row:hover {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.08), 
+                rgba(255, 223, 77, 0.12), 
+                rgba(255, 215, 0, 0.08)
+            );
+        }
+
+        .member-name-cell {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .leader-crown-small {
+            margin-left: 6px;
+            font-size: 0.9rem;
+            filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+        }
+
+        .classe-badge-small {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 2px solid;
+        }
+
+        .role-badge-small {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .role-badge-small.tank {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.3));
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.5);
+        }
+
+        .role-badge-small.dps {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.3));
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .role-badge-small.healer {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.3));
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+
+        .weapons-cell {
+            text-align: center;
+        }
+
+        .weapon-icons-list {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .weapon-icon-small {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
+        }
+
+        .team-cell {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .team-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+        }
+
+        /* Responsividade da tabela */
+        @media (max-width: 768px) {
+            .members-filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-clear-btn {
+                width: 100%;
+            }
+
+            .members-table {
+                font-size: 0.85rem;
+            }
+
+            .members-table th,
+            .members-table td {
+                padding: 8px 6px;
+            }
+
+            .weapon-icon-small {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+
+        .customize-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 15px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .customize-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -1914,7 +2668,6 @@
                 // ============================================
                 {
                     id: 1,
-                    tag: "tag1",
                     name: "Alpha Squad",
                     members: [
                         { name: "Commander Zeta", isLeader: true, role: "tank" },
@@ -1927,7 +2680,6 @@
                 },
                 {
                     id: 2,
-                    tag: "tag1",
                     name: "Beta Force",
                     members: [
                         { name: "Captain Nova", isLeader: true, role: "tank" },
@@ -1940,7 +2692,6 @@
                 },
                 {
                     id: 3,
-                    tag: "tag1",
                     name: "Gamma Elite",
                     members: [
                         { name: "Titan Prime", isLeader: true, role: "tank" },
@@ -1953,7 +2704,6 @@
                 },
                 {
                     id: 4,
-                    tag: "tag1",
                     name: "Delta Unit",
                     members: [
                         { name: "Overlord Ace", isLeader: true, role: "tank" },
@@ -1966,7 +2716,6 @@
                 },
                 {
                     id: 5,
-                    tag: "tag1",
                     name: "Epsilon Core",
                     members: [
                         { name: "Major Nexus", isLeader: true, role: "tank" },
@@ -1979,7 +2728,6 @@
                 },
                 {
                     id: 6,
-                    tag: "tag1",
                     name: "Zeta Division",
                     members: [
                         { name: "Chief Omega", isLeader: true, role: "tank" },
@@ -1992,7 +2740,6 @@
                 },
                 {
                     id: 7,
-                    tag: "tag1",
                     name: "Eta Legion",
                     members: [
                         { name: "General Apex", isLeader: true, role: "tank" },
@@ -2005,7 +2752,6 @@
                 },
                 {
                     id: 8,
-                    tag: "tag1",
                     name: "Theta Corps",
                     members: [
                         { name: "Colonel Vertex", isLeader: true, role: "tank" },
@@ -2018,7 +2764,6 @@
                 },
                 {
                     id: 9,
-                    tag: "tag1",
                     name: "Iota Strike",
                     members: [
                         { name: "Marshal Eclipse", isLeader: true, role: "tank" },
@@ -2031,7 +2776,6 @@
                 },
                 {
                     id: 10,
-                    tag: "tag1",
                     name: "Kappa Watch",
                     members: [
                         { name: "Warden Pulse", isLeader: true, role: "tank" },
@@ -2044,7 +2788,6 @@
                 },
                 {
                     id: 11,
-                    tag: "tag1",
                     name: "Lambda Ops",
                     members: [
                         { name: "Director Flux", isLeader: true, role: "tank" },
@@ -2055,151 +2798,16 @@
                         { name: "Nexus", isLeader: false, role: "healer" }
                     ]
                 },
-                
-                // ============================================
-                // TAG 2 - FORMAÇÃO SECUNDÁRIA (Times 12-22)
-                // ============================================
                 {
                     id: 12,
-                    tag: "tag2",
-                    name: "Alpha Reserve",
+                    name: "Mu Vanguard",
                     members: [
-                        { name: "Commander Zeta II", isLeader: true, role: "tank" },
-                        { name: "Ghost Rider II", isLeader: false, role: "dps" },
-                        { name: "Phoenix II", isLeader: false, role: "healer" },
-                        { name: "Shadow II", isLeader: false, role: "dps" },
-                        { name: "Storm II", isLeader: false, role: "dps" },
-                        { name: "Viper II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 13,
-                    tag: "tag2",
-                    name: "Beta Reserve",
-                    members: [
-                        { name: "Captain Nova II", isLeader: true, role: "tank" },
-                        { name: "Thunder II", isLeader: false, role: "dps" },
-                        { name: "Blaze II", isLeader: false, role: "dps" },
-                        { name: "Frost II", isLeader: false, role: "healer" },
-                        { name: "Echo II", isLeader: false, role: "healer" },
-                        { name: "Razor II", isLeader: false, role: "dps" }
-                    ]
-                },
-                {
-                    id: 14,
-                    tag: "tag2",
-                    name: "Gamma Reserve",
-                    members: [
-                        { name: "Titan Prime II", isLeader: true, role: "tank" },
-                        { name: "Wraith II", isLeader: false, role: "dps" },
-                        { name: "Striker II", isLeader: false, role: "dps" },
-                        { name: "Cobra II", isLeader: false, role: "dps" },
-                        { name: "Falcon II", isLeader: false, role: "healer" },
-                        { name: "Raven II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 15,
-                    tag: "tag2",
-                    name: "Delta Reserve",
-                    members: [
-                        { name: "Overlord Ace II", isLeader: true, role: "tank" },
-                        { name: "Spartan II", isLeader: false, role: "tank" },
-                        { name: "Hunter II", isLeader: false, role: "dps" },
-                        { name: "Reaper II", isLeader: false, role: "dps" },
-                        { name: "Phantom II", isLeader: false, role: "dps" },
-                        { name: "Maverick II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 16,
-                    tag: "tag2",
-                    name: "Epsilon Reserve",
-                    members: [
-                        { name: "Major Nexus II", isLeader: true, role: "tank" },
-                        { name: "Tempest II", isLeader: false, role: "dps" },
-                        { name: "Ranger II", isLeader: false, role: "dps" },
-                        { name: "Sentinel II", isLeader: false, role: "tank" },
-                        { name: "Valkyrie II", isLeader: false, role: "healer" },
-                        { name: "Cipher II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 17,
-                    tag: "tag2",
-                    name: "Zeta Reserve",
-                    members: [
-                        { name: "Chief Omega II", isLeader: true, role: "tank" },
-                        { name: "Spectre II", isLeader: false, role: "dps" },
-                        { name: "Fury II", isLeader: false, role: "dps" },
-                        { name: "Atlas II", isLeader: false, role: "tank" },
-                        { name: "Onyx II", isLeader: false, role: "dps" },
-                        { name: "Volt II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 18,
-                    tag: "tag2",
-                    name: "Eta Reserve",
-                    members: [
-                        { name: "General Apex II", isLeader: true, role: "tank" },
-                        { name: "Kraken II", isLeader: false, role: "tank" },
-                        { name: "Hydra II", isLeader: false, role: "dps" },
-                        { name: "Zeus II", isLeader: false, role: "dps" },
-                        { name: "Hades II", isLeader: false, role: "dps" },
-                        { name: "Poseidon II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 19,
-                    tag: "tag2",
-                    name: "Theta Reserve",
-                    members: [
-                        { name: "Colonel Vertex II", isLeader: true, role: "tank" },
-                        { name: "Rocket II", isLeader: false, role: "dps" },
-                        { name: "Dash II", isLeader: false, role: "dps" },
-                        { name: "Nitro II", isLeader: false, role: "dps" },
-                        { name: "Turbo II", isLeader: false, role: "dps" },
-                        { name: "Jet II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 20,
-                    tag: "tag2",
-                    name: "Iota Reserve",
-                    members: [
-                        { name: "Marshal Eclipse II", isLeader: true, role: "tank" },
-                        { name: "Orion II", isLeader: false, role: "dps" },
-                        { name: "Nebula II", isLeader: false, role: "healer" },
-                        { name: "Cosmos II", isLeader: false, role: "dps" },
-                        { name: "Astro II", isLeader: false, role: "dps" },
-                        { name: "Quasar II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 21,
-                    tag: "tag2",
-                    name: "Kappa Reserve",
-                    members: [
-                        { name: "Warden Pulse II", isLeader: true, role: "tank" },
-                        { name: "Guardian II", isLeader: false, role: "tank" },
-                        { name: "Defender II", isLeader: false, role: "tank" },
-                        { name: "Bulwark II", isLeader: false, role: "dps" },
-                        { name: "Bastion II", isLeader: false, role: "healer" },
-                        { name: "Shield II", isLeader: false, role: "healer" }
-                    ]
-                },
-                {
-                    id: 22,
-                    tag: "tag2",
-                    name: "Lambda Reserve",
-                    members: [
-                        { name: "Director Flux II", isLeader: true, role: "tank" },
-                        { name: "Chaos II", isLeader: false, role: "dps" },
-                        { name: "Matrix II", isLeader: false, role: "dps" },
-                        { name: "Vector II", isLeader: false, role: "dps" },
-                        { name: "Prism II", isLeader: false, role: "healer" },
-                        { name: "Nexus II", isLeader: false, role: "healer" }
+                        { name: "Admiral Zenith", isLeader: true, role: "tank" },
+                        { name: "Blitz", isLeader: false, role: "dps" },
+                        { name: "Inferno", isLeader: false, role: "dps" },
+                        { name: "Eclipse", isLeader: false, role: "dps" },
+                        { name: "Aurora", isLeader: false, role: "healer" },
+                        { name: "Solace", isLeader: false, role: "healer" }
                     ]
                 }
             ]);
@@ -2223,7 +2831,6 @@
             const [feudItems, setFeudItems] = useState([]);
             const [feudName, setFeudName] = useState('');
             const [feudNumber, setFeudNumber] = useState('');
-            const [activeTag, setActiveTag] = useState('tag1'); // Controla qual tag está ativa
             const [roleFilter, setRoleFilter] = useState('all'); // Filtro de roles: 'all', 'tank', 'dps', 'healer'
             const [showStatsModal, setShowStatsModal] = useState(false); // Controla modal de estatísticas/filtros
             const [darkMode, setDarkMode] = useState(true); // Controla tema claro/escuro (false = escuro, true = claro)
@@ -2231,6 +2838,114 @@
             const [showHistoryModal, setShowHistoryModal] = useState(false); // Modal de histórico
             const [showBackupModal, setShowBackupModal] = useState(false); // Modal de backup
             const [showOptionsModal, setShowOptionsModal] = useState(false); // Modal de opções
+            const [showGestaoOptionsModal, setShowGestaoOptionsModal] = useState(false); // Modal de opções de Gestão
+            const [showCustomizeClassesModal, setShowCustomizeClassesModal] = useState(false); // Modal de customizar classes
+            const [showMembersModal, setShowMembersModal] = useState(false); // Modal de lista de membros
+            const [memberSearchQuery, setMemberSearchQuery] = useState(''); // Busca de membros
+            const [memberRoleFilter, setMemberRoleFilter] = useState('all'); // Filtro de role na lista
+            const [memberClassFilter, setMemberClassFilter] = useState('all'); // Filtro de classe na lista
+            const [showOnlyLeaders, setShowOnlyLeaders] = useState(false); // Filtro para mostrar apenas líderes
+            const [showClassesChart, setShowClassesChart] = useState(false); // Controla exibição do gráfico de classes
+            const [selectedClass, setSelectedClass] = useState(null); // Classe selecionada no gráfico
+            
+            // Lista padrão de classes do Throne and Liberty (organizadas por role)
+            const defaultClassNames = {
+                // TANKS
+                'Crusader': 'Crusader',
+                'Templar': 'Templar',
+                'Protector': 'Protector',
+                'Berserker': 'Berserker',
+                'Follower': 'Follower',
+                'Steelheart': 'Steelheart',
+                'Plunderer': 'Plunderer',
+                // HEALERS
+                'Seeker': 'Seeker',
+                'Paladin': 'Paladin',
+                'Summoner': 'Summoner',
+                'Wrath': 'Wrath',
+                'Void Lance': 'Void Lance',
+                // DPS MELEE
+                'Devastator': 'Devastator',
+                'Infiltrator': 'Infiltrator',
+                'Spellblade': 'Spellblade',
+                'Ranger': 'Ranger',
+                'Forerunner': 'Forerunner',
+                'Gladiator': 'Gladiator',
+                'Shadow Dancer': 'Shadow Dancer',
+                // DPS RANGED
+                'Scorpion': 'Scorpion',
+                'Scout': 'Scout',
+                'Cavalier': 'Cavalier',
+                'Polearm': 'Polearm',
+                // DPS MÁGICO
+                'Guardian': 'Guardian',
+                'Redeemer': 'Redeemer',
+                'Battlestitch': 'Battlestitch',
+                'Eradicator': 'Eradicator',
+                'Dark Tormentor': 'Dark Tormentor'
+            };
+            
+            // ============================================================
+            // SISTEMA DE ÍCONES DE ARMAS
+            // ============================================================
+            
+            const weaponIcons = {
+                'Greatsword': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/sword2h.webp',
+                'Sword & Shield': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/sword.webp',
+                'Dagger': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/dagger.webp',
+                'Longbow': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/bow.webp',
+                'Crossbow': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/crossbow.webp',
+                'Staff': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/staff.webp',
+                'Wand': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/wand.webp',
+                'Orb': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/orb.webp',
+                'Spear': 'https://cdn.questlog.gg/throne-and-liberty/common/weapons/check/spear.webp'
+            };
+            
+            const defaultClassWeapons = {
+                // TANKS
+                'Crusader': ['Greatsword', 'Sword & Shield'],
+                'Templar': ['Wand', 'Sword & Shield'],
+                'Protector': ['Longbow', 'Sword & Shield'],
+                'Berserker': ['Dagger', 'Sword & Shield'],
+                'Follower': ['Staff', 'Sword & Shield'],
+                'Steelheart': ['Spear', 'Sword & Shield'],
+                'Plunderer': ['Crossbow', 'Sword & Shield'],
+                // HEALERS
+                'Seeker': ['Wand', 'Longbow'],
+                'Paladin': ['Wand', 'Sword & Shield'],
+                'Summoner': ['Staff', 'Wand'],
+                'Wrath': ['Staff', 'Sword & Shield'],
+                'Void Lance': ['Spear', 'Wand'],
+                // DPS MELEE
+                'Devastator': ['Dagger', 'Greatsword'],
+                'Infiltrator': ['Dagger', 'Crossbow'],
+                'Spellblade': ['Dagger', 'Staff'],
+                'Ranger': ['Greatsword', 'Longbow'],
+                'Forerunner': ['Greatsword', 'Crossbow'],
+                'Gladiator': ['Spear', 'Greatsword'],
+                'Shadow Dancer': ['Spear', 'Dagger'],
+                // DPS RANGED
+                'Scorpion': ['Dagger', 'Crossbow'],
+                'Scout': ['Longbow', 'Dagger'],
+                'Cavalier': ['Spear', 'Crossbow'],
+                'Polearm': ['Spear', 'Longbow'],
+                // DPS MÁGICO
+                'Guardian': ['Staff', 'Greatsword'],
+                'Redeemer': ['Staff', 'Dagger'],
+                'Battlestitch': ['Staff', 'Longbow'],
+                'Eradicator': ['Spear', 'Staff'],
+                'Dark Tormentor': ['Staff', 'Crossbow']
+            };
+            
+            const [classNames, setClassNames] = useState(() => {
+                const saved = localStorage.getItem('rise-class-names');
+                return saved ? JSON.parse(saved) : defaultClassNames;
+            });
+            
+            const [classWeapons, setClassWeapons] = useState(() => {
+                const saved = localStorage.getItem('rise-class-weapons');
+                return saved ? JSON.parse(saved) : defaultClassWeapons;
+            });
             
             // ============================================================
             // 🔐 CONFIGURAÇÃO DAS SENHAS
@@ -2250,14 +2965,15 @@
                 checkSession();
             }, []);
 
-            // Inicializar campos de notas e presença nos membros
+            // Inicializar campos de notas, presença e classe nos membros
             useEffect(() => {
                 const updatedTeams = teams.map(team => ({
                     ...team,
                     members: team.members.map(member => ({
                         ...member,
                         notes: member.notes || '',
-                        isPresent: member.isPresent !== undefined ? member.isPresent : true
+                        isPresent: member.isPresent !== undefined ? member.isPresent : true,
+                        classe: member.classe || ''
                     }))
                 }));
                 setTeams(updatedTeams);
@@ -2543,12 +3259,48 @@
                 }
             };
 
+            // ============================================
+            // FUNÇÕES DE CUSTOMIZAÇÃO DE CLASSES
+            // ============================================
+
+            const saveClassNames = () => {
+                localStorage.setItem('rise-class-names', JSON.stringify(classNames));
+                localStorage.setItem('rise-class-weapons', JSON.stringify(classWeapons));
+                showNotification('✅ Nomes e ícones de classes salvos!');
+            };
+
+            const resetClassNames = () => {
+                setClassNames(defaultClassNames);
+                setClassWeapons(defaultClassWeapons);
+                localStorage.setItem('rise-class-names', JSON.stringify(defaultClassNames));
+                localStorage.setItem('rise-class-weapons', JSON.stringify(defaultClassWeapons));
+                showNotification('✅ Nomes e ícones resetados para padrão!');
+            };
+
+            const updateClassName = (originalName, newName) => {
+                setClassNames(prev => ({
+                    ...prev,
+                    [originalName]: newName
+                }));
+            };
+            
+            const updateClassWeapon = (className, weaponIndex, weaponName) => {
+                setClassWeapons(prev => {
+                    const current = prev[className] || defaultClassWeapons[className];
+                    const updated = [...current];
+                    updated[weaponIndex] = weaponName;
+                    return {
+                        ...prev,
+                        [className]: updated
+                    };
+                });
+            };
+
             // Função para calcular estatísticas dos membros
             const getStatistics = () => {
-                const activeTeams = teams.filter(team => team.tag === activeTag);
                 let stats = { total: 0, tank: 0, dps: 0, healer: 0 };
                 
-                activeTeams.forEach(team => {
+                teams.forEach(team => {
                     team.members.forEach(member => {
                         stats.total++;
                         if (member.role === 'tank') stats.tank++;
@@ -2559,6 +3311,176 @@
                 
                 return stats;
             };
+
+            // Função para contar membros por classe
+            const getClassesStatistics = () => {
+                const classCounts = {};
+                
+                teams.forEach(team => {
+                    team.members.forEach(member => {
+                        if (member.classe) {
+                            if (!classCounts[member.classe]) {
+                                classCounts[member.classe] = 0;
+                            }
+                            classCounts[member.classe]++;
+                        }
+                    });
+                });
+                
+                return classCounts;
+            };
+
+            // UseEffect para criar gráfico de classes
+            React.useEffect(() => {
+                if (!showStatsModal || !showClassesChart) return;
+
+                // Aguarda um pouco para o modal renderizar
+                setTimeout(() => {
+                    const canvas = document.getElementById('classesChart');
+                    if (!canvas) return;
+
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Destroi gráfico anterior se existir
+                    if (window.classesChartInstance) {
+                        window.classesChartInstance.destroy();
+                    }
+
+                    const classCounts = getClassesStatistics();
+
+                    // Organizar por role
+                    const tankClasses = ['Crusader', 'Templar', 'Protector', 'Berserker', 'Follower', 'Steelheart', 'Plunderer'];
+                    const healerClasses = ['Seeker', 'Paladin', 'Summoner', 'Wrath', 'Void Lance'];
+                    const dpsClasses = ['Devastator', 'Infiltrator', 'Spellblade', 'Ranger', 'Forerunner', 'Gladiator', 'Shadow Dancer', 'Scorpion', 'Scout', 'Cavalier', 'Polearm', 'Guardian', 'Redeemer', 'Battlestitch', 'Eradicator', 'Dark Tormentor'];
+
+                    // Preparar dados
+                    const tankData = tankClasses.map(c => ({ classe: c, count: classCounts[c] || 0 })).filter(d => d.count > 0).sort((a, b) => b.count - a.count);
+                    const healerData = healerClasses.map(c => ({ classe: c, count: classCounts[c] || 0 })).filter(d => d.count > 0).sort((a, b) => b.count - a.count);
+                    const dpsData = dpsClasses.map(c => ({ classe: c, count: classCounts[c] || 0 })).filter(d => d.count > 0).sort((a, b) => b.count - a.count);
+
+                    // Array combinado de nomes de classes (sem ícones, para mapear index)
+                    const allClassNames = [
+                        ...tankData.map(d => d.classe),
+                        ...healerData.map(d => d.classe),
+                        ...dpsData.map(d => d.classe)
+                    ];
+
+                    // Combinar todos os dados na ordem: Tanks, Healers, DPS
+                    const allLabels = [
+                        ...tankData.map(d => `🛡️ ${classNames[d.classe] || d.classe}`),
+                        ...healerData.map(d => `✚ ${classNames[d.classe] || d.classe}`),
+                        ...dpsData.map(d => `⚔️ ${classNames[d.classe] || d.classe}`)
+                    ];
+
+                    const allData = [
+                        ...tankData.map(d => d.count),
+                        ...healerData.map(d => d.count),
+                        ...dpsData.map(d => d.count)
+                    ];
+
+                    const allColors = [
+                        ...tankData.map(() => 'rgba(52, 152, 219, 0.8)'),
+                        ...healerData.map(() => 'rgba(46, 204, 113, 0.8)'),
+                        ...dpsData.map(() => 'rgba(231, 76, 60, 0.8)')
+                    ];
+
+                    const allBorders = [
+                        ...tankData.map(() => 'rgba(52, 152, 219, 1)'),
+                        ...healerData.map(() => 'rgba(46, 204, 113, 1)'),
+                        ...dpsData.map(() => 'rgba(231, 76, 60, 1)')
+                    ];
+
+                    window.classesChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: allLabels,
+                            datasets: [{
+                                label: 'Membros',
+                                data: allData,
+                                backgroundColor: allColors,
+                                borderColor: allBorders,
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            onClick: (event, activeElements) => {
+                                if (activeElements.length > 0) {
+                                    const index = activeElements[0].index;
+                                    const clickedClass = allClassNames[index];
+                                    setSelectedClass(clickedClass);
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    borderColor: '#666',
+                                    borderWidth: 1,
+                                    padding: 12,
+                                    displayColors: false,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.parsed.x + ' membro' + (context.parsed.x !== 1 ? 's' : '');
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1,
+                                        color: '#000',
+                                        font: {
+                                            size: 14,
+                                            weight: 700
+                                        }
+                                    },
+                                    grid: {
+                                        color: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Quantidade de Membros',
+                                        color: '#000',
+                                        font: {
+                                            size: 16,
+                                            weight: 700
+                                        }
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: '#000',
+                                        font: {
+                                            size: 13,
+                                            weight: 700
+                                        }
+                                    },
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }, 100);
+
+                // Cleanup ao fechar modal
+                return () => {
+                    if (window.classesChartInstance) {
+                        window.classesChartInstance.destroy();
+                        window.classesChartInstance = null;
+                    }
+                };
+            }, [showStatsModal, showClassesChart, teams, darkMode]);
 
             const loadFromDatabase = async () => {
                 if (!db) return;
@@ -2657,7 +3579,7 @@
                 setEditMemberModal(null);
                 setHasUnsavedChanges(true);
                 showNotification('✅ Membro atualizado! Clique em "Salvar" para gravar.');
-                addToHistory('Membro Editado', `${member.name} - ${member.role}`);
+                addToHistory('Membro Editado', `${member.name} - ${member.role}${member.classe ? ` (${member.classe})` : ''}`);
             };
 
             // Abrir modal de edição de time
@@ -2931,7 +3853,12 @@
 
                     {/* CONTEÚDO PRINCIPAL */}
                     <div className="container">
-                        <div className="action-buttons">
+                        <div id="teams-capture">
+                        <header>
+                            <h1 className="logo">RISE</h1>
+                            
+                            {/* BOTÕES DE AÇÃO */}
+                            <div className="action-buttons">
                                 <button 
                                     className={`action-btn ${isEditMode ? 'edit-mode' : ''}`}
                                     onClick={toggleEditMode}
@@ -2944,14 +3871,8 @@
                                 >
                                     {hasUnsavedChanges ? 'Salvar Alterações' : 'Salvar Configuração'}
                                 </button>
-                                <button className="action-btn" onClick={exportTable}>
-                                    Exportar Imagem
-                                </button>
-                                <button className="action-btn" onClick={() => setShowStatsModal(true)}>
-                                    Estatísticas
-                                </button>
-                                <button className="action-btn" onClick={openFeudModal}>
-                                    FEUD
+                                <button className="action-btn" onClick={() => setShowGestaoOptionsModal(true)}>
+                                    Gestão
                                 </button>
                                 <button className="action-btn" onClick={() => setShowOptionsModal(true)}>
                                     Opções
@@ -2960,10 +3881,6 @@
                                     Sair
                                 </button>
                             </div>
-
-                        <div id="teams-capture">
-                        <header>
-                            <h1 className="logo">RISE</h1>
                         </header>
 
                         <section className="teams-section">
@@ -2977,26 +3894,10 @@
                                 </p>
                             </div>
                             
-                            {/* BOTÕES DE TAG */}
-                            <div className="tag-buttons-container">
-                                <button 
-                                    className={`tag-btn ${activeTag === 'tag1' ? 'active' : ''}`}
-                                    onClick={() => setActiveTag('tag1')}
-                                >
-                                    TAG 1
-                                </button>
-                                <button 
-                                    className={`tag-btn ${activeTag === 'tag2' ? 'active' : ''}`}
-                                    onClick={() => setActiveTag('tag2')}
-                                >
-                                    TAG 2
-                                </button>
-                            </div>
-                            
                             {/* ESTATÍSTICAS E FILTROS */}
                             
                             <div className="teams-grid">
-                                {teams.filter(team => team.tag === activeTag).map((team) => (
+                                {teams.map((team) => (
                                     <div 
                                         key={team.id} 
                                         className={`team-card ${isEditMode ? 'edit-mode' : ''}`}
@@ -3043,14 +3944,36 @@
                                                     <div className="member-avatar">
                                                         {member.name.charAt(0)}
                                                     </div>
-                                                    <span className="member-name">{member.name}</span>
-                                                    <div className="badges-container">
-                                                        {member.isLeader && (
-                                                            <span className="leader-badge">LÍDER</span>
+                                                    <div className="member-content-wrapper">
+                                                        <div className="member-top-row">
+                                                            <span className="member-name">
+                                                                {member.name}
+                                                                {member.isLeader && <span className="leader-crown"> 👑</span>}
+                                                            </span>
+                                                            <div className="badges-container">
+                                                                <span className={`role-badge ${member.role}`}>
+                                                                    {member.role}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        {member.classe && (
+                                                            <div className="member-bottom-row">
+                                                                <div className={`classe-name-display classe-${member.classe.replace(/ /g, '')}`}>
+                                                                    {classNames[member.classe] || member.classe}
+                                                                </div>
+                                                                <div className="weapon-icons-row">
+                                                                    {(classWeapons[member.classe] || defaultClassWeapons[member.classe])?.map((weapon, idx) => (
+                                                                        <img 
+                                                                            key={idx}
+                                                                            src={weaponIcons[weapon]} 
+                                                                            className="weapon-icon-display"
+                                                                            alt={weapon}
+                                                                            title={weapon}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
                                                         )}
-                                                        <span className={`role-badge ${member.role}`}>
-                                                            {member.role}
-                                                        </span>
                                                     </div>
                                                 </li>
                                             )})}
@@ -3126,6 +4049,68 @@
                                                 🛡️ Tank
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Campo de Classe */}
+                                    <div className="form-group">
+                                        <label className="form-label">Classe (Combinação de Armas)</label>
+                                        <select 
+                                            className="form-input"
+                                            value={editMemberModal.member.classe || ''}
+                                            onChange={(e) => setEditMemberModal({
+                                                ...editMemberModal,
+                                                member: { ...editMemberModal.member, classe: e.target.value }
+                                            })}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            <option value="">-- Selecione uma classe --</option>
+                                            
+                                            <optgroup label="🛡️ TANKS">
+                                                <option value="Crusader">{classNames['Crusader']}</option>
+                                                <option value="Templar">{classNames['Templar']}</option>
+                                                <option value="Protector">{classNames['Protector']}</option>
+                                                <option value="Berserker">{classNames['Berserker']}</option>
+                                                <option value="Follower">{classNames['Follower']}</option>
+                                                <option value="Steelheart">{classNames['Steelheart']}</option>
+                                                <option value="Plunderer">{classNames['Plunderer']}</option>
+                                            </optgroup>
+                                            
+                                            <optgroup label="✚ HEALERS">
+                                                <option value="Seeker">{classNames['Seeker']}</option>
+                                                <option value="Paladin">{classNames['Paladin']}</option>
+                                                <option value="Summoner">{classNames['Summoner']}</option>
+                                                <option value="Wrath">{classNames['Wrath']}</option>
+                                                <option value="Void Lance">{classNames['Void Lance']}</option>
+                                            </optgroup>
+                                            
+                                            <optgroup label="⚔️ DPS MELEE">
+                                                <option value="Devastator">{classNames['Devastator']}</option>
+                                                <option value="Infiltrator">{classNames['Infiltrator']}</option>
+                                                <option value="Spellblade">{classNames['Spellblade']}</option>
+                                                <option value="Ranger">{classNames['Ranger']}</option>
+                                                <option value="Forerunner">{classNames['Forerunner']}</option>
+                                                <option value="Gladiator">{classNames['Gladiator']}</option>
+                                                <option value="Shadow Dancer">{classNames['Shadow Dancer']}</option>
+                                            </optgroup>
+                                            
+                                            <optgroup label="🏹 DPS RANGED">
+                                                <option value="Scorpion">{classNames['Scorpion']}</option>
+                                                <option value="Scout">{classNames['Scout']}</option>
+                                                <option value="Cavalier">{classNames['Cavalier']}</option>
+                                                <option value="Polearm">{classNames['Polearm']}</option>
+                                            </optgroup>
+                                            
+                                            <optgroup label="🔮 DPS MÁGICO">
+                                                <option value="Guardian">{classNames['Guardian']}</option>
+                                                <option value="Redeemer">{classNames['Redeemer']}</option>
+                                                <option value="Battlestitch">{classNames['Battlestitch']}</option>
+                                                <option value="Eradicator">{classNames['Eradicator']}</option>
+                                                <option value="Dark Tormentor">{classNames['Dark Tormentor']}</option>
+                                            </optgroup>
+                                        </select>
+                                        <small style={{color: 'var(--text-dim)', fontSize: '0.85rem', marginTop: '5px', display: 'block'}}>
+                                            Opcional - Selecione a classe do Throne and Liberty (personalize os nomes em Opções)
+                                        </small>
                                     </div>
 
                                     {/* Campo de Presença */}
@@ -3242,6 +4227,15 @@
                         <div className="change-password-overlay" onClick={closeChangePasswordModal}>
                             <div className="change-password-modal" onClick={(e) => e.stopPropagation()}>
                                 <div className="change-password-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            closeChangePasswordModal();
+                                            setShowOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
                                     <h3 className="change-password-title">Alterar Senha de Acesso</h3>
                                     <button className="change-password-close" onClick={closeChangePasswordModal}>×</button>
                                 </div>
@@ -3307,6 +4301,15 @@
                         <div className="feud-overlay" onClick={closeFeudModal}>
                             <div className="feud-modal" onClick={(e) => e.stopPropagation()}>
                                 <div className="feud-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            closeFeudModal();
+                                            setShowGestaoOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
                                     <h2 className="feud-title">FEUD</h2>
                                     <button className="feud-close" onClick={closeFeudModal}>×</button>
                                 </div>
@@ -3379,9 +4382,18 @@
                     {/* MODAL DE ESTATÍSTICAS E FILTROS */}
                     {showStatsModal && (
                         <div className="modal-overlay" onClick={() => setShowStatsModal(false)}>
-                            <div className="modal" style={{maxWidth: '800px'}} onClick={(e) => e.stopPropagation()}>
+                            <div className="modal" style={{maxWidth: '1000px', maxHeight: '90vh', overflowY: 'auto'}} onClick={(e) => e.stopPropagation()}>
                                 <div className="modal-header">
-                                    <h2 className="modal-title">Estatísticas e Filtros - {activeTag === 'tag1' ? 'TAG 1' : 'TAG 2'}</h2>
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            setShowStatsModal(false);
+                                            setShowGestaoOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
+                                    <h2 className="modal-title">Estatísticas e Filtros</h2>
                                     <button className="close-btn" onClick={() => setShowStatsModal(false)}>×</button>
                                 </div>
                                 
@@ -3408,6 +4420,158 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* Botão para mostrar/ocultar gráfico de classes */}
+                                    <div style={{marginBottom: '30px', textAlign: 'center'}}>
+                                        <button 
+                                            className="modal-btn"
+                                            onClick={() => {
+                                                setShowClassesChart(!showClassesChart);
+                                                if (showClassesChart) {
+                                                    setSelectedClass(null); // Limpa seleção ao fechar
+                                                }
+                                            }}
+                                            style={{fontSize: '1rem', padding: '12px 30px'}}
+                                        >
+                                            {showClassesChart ? '❌ Ocultar Gráfico de Classes' : '📊 Mostrar Gráfico de Classes'}
+                                        </button>
+                                    </div>
+
+                                    {/* Gráfico de Classes (condicional) */}
+                                    {showClassesChart && (
+                                        <div className="chart-section" style={{marginBottom: '30px'}}>
+                                            <h3 style={{color: 'var(--primary)', marginBottom: '20px', fontSize: '1.2rem', textAlign: 'center'}}>
+                                                📊 Distribuição por Classe
+                                            </h3>
+                                            <p style={{color: 'var(--text-dim)', textAlign: 'center', marginBottom: '15px', fontSize: '0.9rem'}}>
+                                                💡 Clique em uma barra para ver os membros dessa classe
+                                            </p>
+                                            <div style={{position: 'relative', height: '600px', maxHeight: '70vh'}}>
+                                                <canvas id="classesChart"></canvas>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Lista de membros da classe selecionada */}
+                                    {selectedClass && showClassesChart && (
+                                        <div className="selected-class-members" style={{marginBottom: '30px'}}>
+                                            <div style={{
+                                                display: 'flex', 
+                                                justifyContent: 'space-between', 
+                                                alignItems: 'center',
+                                                marginBottom: '15px'
+                                            }}>
+                                                <h3 style={{color: 'var(--primary)', fontSize: '1.1rem'}}>
+                                                    Membros da classe: <strong>{classNames[selectedClass] || selectedClass}</strong>
+                                                </h3>
+                                                <button 
+                                                    className="modal-btn secondary"
+                                                    onClick={() => setSelectedClass(null)}
+                                                    style={{padding: '8px 16px', fontSize: '0.9rem'}}
+                                                >
+                                                    ✖️ Limpar Seleção
+                                                </button>
+                                            </div>
+                                            <div style={{
+                                                background: 'rgba(255, 255, 255, 0.03)',
+                                                border: '1px solid var(--card-border)',
+                                                borderRadius: '8px',
+                                                padding: '15px',
+                                                maxHeight: '400px',
+                                                overflowY: 'auto'
+                                            }}>
+                                                {(() => {
+                                                    const membersOfClass = [];
+                                                    teams.forEach(team => {
+                                                        team.members.forEach(member => {
+                                                            if (member.classe === selectedClass) {
+                                                                membersOfClass.push({
+                                                                    ...member,
+                                                                    teamId: team.id,
+                                                                    teamName: team.name
+                                                                });
+                                                            }
+                                                        });
+                                                    });
+
+                                                    if (membersOfClass.length === 0) {
+                                                        return (
+                                                            <p style={{textAlign: 'center', color: 'var(--text-dim)', padding: '20px'}}>
+                                                                Nenhum membro encontrado com essa classe
+                                                            </p>
+                                                        );
+                                                    }
+
+                                                    return (
+                                                        <div style={{display: 'grid', gap: '10px'}}>
+                                                            {membersOfClass.map((member, index) => (
+                                                                <div 
+                                                                    key={`${member.teamId}-${index}`}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                        padding: '12px 15px',
+                                                                        background: member.isLeader 
+                                                                            ? 'linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 223, 77, 0.12), rgba(255, 215, 0, 0.08))' 
+                                                                            : 'rgba(255, 255, 255, 0.05)',
+                                                                        border: '1px solid var(--card-border)',
+                                                                        borderRadius: '6px'
+                                                                    }}
+                                                                >
+                                                                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                                                                        <span style={{fontSize: '1rem', fontWeight: 600, color: 'var(--text)'}}>
+                                                                            {member.name}
+                                                                            {member.isLeader && <span style={{marginLeft: '6px'}}>👑</span>}
+                                                                        </span>
+                                                                        <span className={`role-badge-small ${member.role}`}>
+                                                                            {member.role === 'tank' && '🛡️'}
+                                                                            {member.role === 'dps' && '⚔️'}
+                                                                            {member.role === 'healer' && '✚'}
+                                                                            {' '}{member.role.toUpperCase()}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                                                                        {(classWeapons[member.classe] || defaultClassWeapons[member.classe]) && (
+                                                                            <div style={{display: 'flex', gap: '6px'}}>
+                                                                                {(classWeapons[member.classe] || defaultClassWeapons[member.classe]).map((weapon, idx) => (
+                                                                                    <img 
+                                                                                        key={idx}
+                                                                                        src={weaponIcons[weapon]} 
+                                                                                        className="weapon-icon-small"
+                                                                                        alt={weapon}
+                                                                                        title={weapon}
+                                                                                    />
+                                                                                ))}
+                                                                            </div>
+                                                                        )}
+                                                                        <span style={{
+                                                                            fontSize: '0.85rem',
+                                                                            color: 'var(--text-dim)',
+                                                                            padding: '4px 8px',
+                                                                            background: 'rgba(255, 255, 255, 0.05)',
+                                                                            borderRadius: '4px'
+                                                                        }}>
+                                                                            #{member.teamId} {member.teamName}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                            <p style={{
+                                                                textAlign: 'center',
+                                                                marginTop: '10px',
+                                                                color: 'var(--primary)',
+                                                                fontSize: '0.9rem',
+                                                                fontWeight: 600
+                                                            }}>
+                                                                Total: {membersOfClass.length} membro{membersOfClass.length !== 1 ? 's' : ''}
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                })()}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Filtros por Role */}
                                     <div className="filter-section">
@@ -3466,6 +4630,15 @@
                         <div className="modal-overlay" onClick={() => setShowHistoryModal(false)}>
                             <div className="modal" style={{maxWidth: '700px'}} onClick={(e) => e.stopPropagation()}>
                                 <div className="modal-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            setShowHistoryModal(false);
+                                            setShowOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
                                     <h2 className="modal-title">Histórico de Mudanças</h2>
                                     <button className="close-btn" onClick={() => setShowHistoryModal(false)}>×</button>
                                 </div>
@@ -3502,6 +4675,15 @@
                         <div className="modal-overlay" onClick={() => setShowBackupModal(false)}>
                             <div className="modal" style={{maxWidth: '500px'}} onClick={(e) => e.stopPropagation()}>
                                 <div className="modal-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            setShowBackupModal(false);
+                                            setShowOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
                                     <h2 className="modal-title">Backup & Restore</h2>
                                     <button className="close-btn" onClick={() => setShowBackupModal(false)}>×</button>
                                 </div>
@@ -3529,6 +4711,70 @@
 
                                 <div className="modal-actions" style={{marginTop: '20px'}}>
                                     <button className="modal-btn secondary" onClick={() => setShowBackupModal(false)}>
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE GESTÃO */}
+                    {showGestaoOptionsModal && (
+                        <div className="modal-overlay" onClick={() => setShowGestaoOptionsModal(false)}>
+                            <div className="modal" style={{maxWidth: '450px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">Gestão</h2>
+                                    <button className="close-btn" onClick={() => setShowGestaoOptionsModal(false)}>×</button>
+                                </div>
+                                
+                                <div className="options-menu">
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowGestaoOptionsModal(false);
+                                            setShowStatsModal(true);
+                                        }}
+                                    >
+                                        <span className="option-icon">📊</span>
+                                        <span>Estatísticas</span>
+                                    </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowGestaoOptionsModal(false);
+                                            openFeudModal();
+                                        }}
+                                    >
+                                        <span className="option-icon">⚔️</span>
+                                        <span>FEUD</span>
+                                    </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowGestaoOptionsModal(false);
+                                            setShowMembersModal(true);
+                                        }}
+                                    >
+                                        <span className="option-icon">👥</span>
+                                        <span>Membros</span>
+                                    </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowGestaoOptionsModal(false);
+                                            exportTable();
+                                        }}
+                                    >
+                                        <span className="option-icon">📸</span>
+                                        <span>Exportar Imagem</span>
+                                    </button>
+                                </div>
+
+                                <div className="modal-actions" style={{marginTop: '20px'}}>
+                                    <button className="modal-btn secondary" onClick={() => setShowGestaoOptionsModal(false)}>
                                         Fechar
                                     </button>
                                 </div>
@@ -3578,10 +4824,548 @@
                                         <span className="option-icon">🔑</span>
                                         <span>Alterar Senha</span>
                                     </button>
+
+                                    <button 
+                                        className="option-btn"
+                                        onClick={() => {
+                                            setShowOptionsModal(false);
+                                            setShowCustomizeClassesModal(true);
+                                        }}
+                                    >
+                                        <span className="option-icon">🎮</span>
+                                        <span>Personalizar Classes</span>
+                                    </button>
                                 </div>
 
                                 <div className="modal-actions" style={{marginTop: '20px'}}>
                                     <button className="modal-btn secondary" onClick={() => setShowOptionsModal(false)}>
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL DE CUSTOMIZAÇÃO DE CLASSES */}
+                    {showCustomizeClassesModal && (
+                        <div className="modal-overlay" onClick={() => setShowCustomizeClassesModal(false)}>
+                            <div className="modal" style={{maxWidth: '950px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            setShowCustomizeClassesModal(false);
+                                            setShowOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
+                                    <h2 className="modal-title">🎮 Personalizar Classes e Ícones</h2>
+                                    <button className="close-btn" onClick={() => setShowCustomizeClassesModal(false)}>×</button>
+                                </div>
+                                
+                                <div style={{padding: '20px'}}>
+                                    <p style={{marginBottom: '15px', color: 'var(--text-dim)'}}>
+                                        Personalize os nomes e ícones de armas das classes do Throne and Liberty
+                                    </p>
+
+                                    {/* TANKS */}
+                                    <div className="customize-header">🛡️ TANKS</div>
+                                    <div className="customize-classes-grid">
+                                        {['Crusader', 'Templar', 'Protector', 'Berserker', 'Follower', 'Steelheart', 'Plunderer'].map(className => (
+                                            <div key={className} className="class-item-full">
+                                                <label className="class-item-label">{className}</label>
+                                                <input 
+                                                    type="text"
+                                                    className="class-item-input"
+                                                    value={classNames[className]}
+                                                    onChange={(e) => updateClassName(className, e.target.value)}
+                                                    placeholder={className}
+                                                />
+                                                <div className="weapon-selectors">
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 1:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[0] || defaultClassWeapons[className][0]}
+                                                            onChange={(e) => updateClassWeapon(className, 0, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[0] || defaultClassWeapons[className][0]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 1"
+                                                        />
+                                                    </div>
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 2:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[1] || defaultClassWeapons[className][1]}
+                                                            onChange={(e) => updateClassWeapon(className, 1, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[1] || defaultClassWeapons[className][1]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* HEALERS */}
+                                    <div className="customize-header">✚ HEALERS</div>
+                                    <div className="customize-classes-grid">
+                                        {['Seeker', 'Paladin', 'Summoner', 'Wrath', 'Void Lance'].map(className => (
+                                            <div key={className} className="class-item-full">
+                                                <label className="class-item-label">{className}</label>
+                                                <input 
+                                                    type="text"
+                                                    className="class-item-input"
+                                                    value={classNames[className]}
+                                                    onChange={(e) => updateClassName(className, e.target.value)}
+                                                    placeholder={className}
+                                                />
+                                                <div className="weapon-selectors">
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 1:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[0] || defaultClassWeapons[className][0]}
+                                                            onChange={(e) => updateClassWeapon(className, 0, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[0] || defaultClassWeapons[className][0]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 1"
+                                                        />
+                                                    </div>
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 2:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[1] || defaultClassWeapons[className][1]}
+                                                            onChange={(e) => updateClassWeapon(className, 1, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[1] || defaultClassWeapons[className][1]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* DPS MELEE */}
+                                    <div className="customize-header">⚔️ DPS MELEE</div>
+                                    <div className="customize-classes-grid">
+                                        {['Devastator', 'Infiltrator', 'Spellblade', 'Ranger', 'Forerunner', 'Gladiator', 'Shadow Dancer'].map(className => (
+                                            <div key={className} className="class-item-full">
+                                                <label className="class-item-label">{className}</label>
+                                                <input 
+                                                    type="text"
+                                                    className="class-item-input"
+                                                    value={classNames[className]}
+                                                    onChange={(e) => updateClassName(className, e.target.value)}
+                                                    placeholder={className}
+                                                />
+                                                <div className="weapon-selectors">
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 1:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[0] || defaultClassWeapons[className][0]}
+                                                            onChange={(e) => updateClassWeapon(className, 0, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[0] || defaultClassWeapons[className][0]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 1"
+                                                        />
+                                                    </div>
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 2:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[1] || defaultClassWeapons[className][1]}
+                                                            onChange={(e) => updateClassWeapon(className, 1, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[1] || defaultClassWeapons[className][1]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* DPS RANGED */}
+                                    <div className="customize-header">🏹 DPS RANGED</div>
+                                    <div className="customize-classes-grid">
+                                        {['Scorpion', 'Scout', 'Cavalier', 'Polearm'].map(className => (
+                                            <div key={className} className="class-item-full">
+                                                <label className="class-item-label">{className}</label>
+                                                <input 
+                                                    type="text"
+                                                    className="class-item-input"
+                                                    value={classNames[className]}
+                                                    onChange={(e) => updateClassName(className, e.target.value)}
+                                                    placeholder={className}
+                                                />
+                                                <div className="weapon-selectors">
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 1:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[0] || defaultClassWeapons[className][0]}
+                                                            onChange={(e) => updateClassWeapon(className, 0, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[0] || defaultClassWeapons[className][0]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 1"
+                                                        />
+                                                    </div>
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 2:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[1] || defaultClassWeapons[className][1]}
+                                                            onChange={(e) => updateClassWeapon(className, 1, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[1] || defaultClassWeapons[className][1]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* DPS MÁGICO */}
+                                    <div className="customize-header">🔮 DPS MÁGICO</div>
+                                    <div className="customize-classes-grid">
+                                        {['Guardian', 'Redeemer', 'Battlestitch', 'Eradicator', 'Dark Tormentor'].map(className => (
+                                            <div key={className} className="class-item-full">
+                                                <label className="class-item-label">{className}</label>
+                                                <input 
+                                                    type="text"
+                                                    className="class-item-input"
+                                                    value={classNames[className]}
+                                                    onChange={(e) => updateClassName(className, e.target.value)}
+                                                    placeholder={className}
+                                                />
+                                                <div className="weapon-selectors">
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 1:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[0] || defaultClassWeapons[className][0]}
+                                                            onChange={(e) => updateClassWeapon(className, 0, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[0] || defaultClassWeapons[className][0]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 1"
+                                                        />
+                                                    </div>
+                                                    <div className="weapon-selector">
+                                                        <label className="weapon-label">Arma 2:</label>
+                                                        <select 
+                                                            className="weapon-select"
+                                                            value={classWeapons[className]?.[1] || defaultClassWeapons[className][1]}
+                                                            onChange={(e) => updateClassWeapon(className, 1, e.target.value)}
+                                                        >
+                                                            {Object.keys(weaponIcons).map(weapon => (
+                                                                <option key={weapon} value={weapon}>{weapon}</option>
+                                                            ))}
+                                                        </select>
+                                                        <img 
+                                                            src={weaponIcons[classWeapons[className]?.[1] || defaultClassWeapons[className][1]]} 
+                                                            className="weapon-icon-preview"
+                                                            alt="Arma 2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="modal-actions customize-actions">
+                                    <button className="modal-btn" onClick={() => { saveClassNames(); setShowCustomizeClassesModal(false); }}>
+                                        💾 Salvar Tudo
+                                    </button>
+                                    <button className="modal-btn secondary" onClick={resetClassNames}>
+                                        🔄 Resetar Padrão
+                                    </button>
+                                    <button className="modal-btn secondary" onClick={() => setShowCustomizeClassesModal(false)}>
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* MODAL DE LISTA DE MEMBROS */}
+                    {showMembersModal && (
+                        <div className="modal-overlay" onClick={() => setShowMembersModal(false)}>
+                            <div className="modal members-modal" style={{maxWidth: '1200px', maxHeight: '90vh'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <button 
+                                        className="back-btn"
+                                        onClick={() => {
+                                            setShowMembersModal(false);
+                                            setShowGestaoOptionsModal(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
+                                    <h2 className="modal-title">👥 Lista Completa de Membros</h2>
+                                    <button className="close-btn" onClick={() => setShowMembersModal(false)}>×</button>
+                                </div>
+                                
+                                <div style={{padding: '20px'}}>
+                                    {/* Filtros e Busca */}
+                                    <div className="members-filters">
+                                        <div className="members-search">
+                                            <input 
+                                                type="text"
+                                                className="search-input"
+                                                placeholder="🔍 Buscar por nome..."
+                                                value={memberSearchQuery}
+                                                onChange={(e) => setMemberSearchQuery(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="members-filter-row">
+                                            <select 
+                                                className="filter-select"
+                                                value={memberRoleFilter}
+                                                onChange={(e) => setMemberRoleFilter(e.target.value)}
+                                            >
+                                                <option value="all">Todos os Roles</option>
+                                                <option value="tank">🛡️ Tanks</option>
+                                                <option value="dps">⚔️ DPS</option>
+                                                <option value="healer">✚ Healers</option>
+                                            </select>
+                                            
+                                            <select 
+                                                className="filter-select"
+                                                value={memberClassFilter}
+                                                onChange={(e) => setMemberClassFilter(e.target.value)}
+                                            >
+                                                <option value="all">Todas as Classes</option>
+                                                <optgroup label="🛡️ TANKS">
+                                                    <option value="Crusader">Crusader</option>
+                                                    <option value="Templar">Templar</option>
+                                                    <option value="Protector">Protector</option>
+                                                    <option value="Berserker">Berserker</option>
+                                                    <option value="Follower">Follower</option>
+                                                    <option value="Steelheart">Steelheart</option>
+                                                    <option value="Plunderer">Plunderer</option>
+                                                </optgroup>
+                                                <optgroup label="✚ HEALERS">
+                                                    <option value="Seeker">Seeker</option>
+                                                    <option value="Paladin">Paladin</option>
+                                                    <option value="Summoner">Summoner</option>
+                                                    <option value="Wrath">Wrath</option>
+                                                    <option value="Void Lance">Void Lance</option>
+                                                </optgroup>
+                                                <optgroup label="⚔️ DPS MELEE">
+                                                    <option value="Devastator">Devastator</option>
+                                                    <option value="Infiltrator">Infiltrator</option>
+                                                    <option value="Spellblade">Spellblade</option>
+                                                    <option value="Ranger">Ranger</option>
+                                                    <option value="Forerunner">Forerunner</option>
+                                                    <option value="Gladiator">Gladiator</option>
+                                                    <option value="Shadow Dancer">Shadow Dancer</option>
+                                                </optgroup>
+                                                <optgroup label="🏹 DPS RANGED">
+                                                    <option value="Scorpion">Scorpion</option>
+                                                    <option value="Scout">Scout</option>
+                                                    <option value="Cavalier">Cavalier</option>
+                                                    <option value="Polearm">Polearm</option>
+                                                </optgroup>
+                                                <optgroup label="🔮 DPS MÁGICO">
+                                                    <option value="Guardian">Guardian</option>
+                                                    <option value="Redeemer">Redeemer</option>
+                                                    <option value="Battlestitch">Battlestitch</option>
+                                                    <option value="Eradicator">Eradicator</option>
+                                                    <option value="Dark Tormentor">Dark Tormentor</option>
+                                                </optgroup>
+                                            </select>
+                                            
+                                            <label className="leader-filter-checkbox">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={showOnlyLeaders}
+                                                    onChange={(e) => setShowOnlyLeaders(e.target.checked)}
+                                                />
+                                                <span>👑 Apenas Líderes</span>
+                                            </label>
+                                            
+                                            <button 
+                                                className="filter-clear-btn"
+                                                onClick={() => {
+                                                    setMemberSearchQuery('');
+                                                    setMemberRoleFilter('all');
+                                                    setMemberClassFilter('all');
+                                                    setShowOnlyLeaders(false);
+                                                }}
+                                            >
+                                                🔄 Limpar Filtros
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Contador */}
+                                    {(() => {
+                                        const allMembers = teams.flatMap(team => 
+                                            team.members.map(member => ({
+                                                ...member,
+                                                teamId: team.id,
+                                                teamName: team.name
+                                            }))
+                                        );
+                                        
+                                        const filteredMembers = allMembers
+                                            .filter(member => {
+                                                const matchesSearch = memberSearchQuery === '' || 
+                                                    member.name.toLowerCase().includes(memberSearchQuery.toLowerCase());
+                                                const matchesRole = memberRoleFilter === 'all' || member.role === memberRoleFilter;
+                                                const matchesClass = memberClassFilter === 'all' || member.classe === memberClassFilter;
+                                                const matchesLeader = !showOnlyLeaders || member.isLeader === true;
+                                                return matchesSearch && matchesRole && matchesClass && matchesLeader;
+                                            })
+                                            .sort((a, b) => a.name.localeCompare(b.name));
+                                        
+                                        return (
+                                            <>
+                                                <div className="members-count">
+                                                    Mostrando <strong>{filteredMembers.length}</strong> de <strong>{allMembers.length}</strong> membros
+                                                </div>
+                                                
+                                                {/* Tabela de Membros */}
+                                                <div className="members-table-container">
+                                                    <table className="members-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nome</th>
+                                                                <th>Classe</th>
+                                                                <th>Role</th>
+                                                                <th>Armas</th>
+                                                                <th>Time</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {filteredMembers.length === 0 ? (
+                                                                <tr>
+                                                                    <td colSpan="5" style={{textAlign: 'center', padding: '40px', color: 'var(--text-dim)'}}>
+                                                                        Nenhum membro encontrado
+                                                                    </td>
+                                                                </tr>
+                                                            ) : (
+                                                                filteredMembers.map((member, index) => (
+                                                                    <tr key={`${member.teamId}-${index}`} className={member.isLeader ? 'leader-row' : ''}>
+                                                                        <td className="member-name-cell">
+                                                                            {member.name}
+                                                                            {member.isLeader && <span className="leader-crown-small">👑</span>}
+                                                                        </td>
+                                                                        <td>
+                                                                            {member.classe ? (
+                                                                                <span className={`classe-badge-small classe-${member.classe.replace(/ /g, '')}`}>
+                                                                                    {classNames[member.classe] || member.classe}
+                                                                                </span>
+                                                                            ) : (
+                                                                                <span style={{color: 'var(--text-dim)', fontSize: '0.85rem'}}>Sem classe</span>
+                                                                            )}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span className={`role-badge-small ${member.role}`}>
+                                                                                {member.role === 'tank' && '🛡️'}
+                                                                                {member.role === 'dps' && '⚔️'}
+                                                                                {member.role === 'healer' && '✚'}
+                                                                                {' '}{member.role.toUpperCase()}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td className="weapons-cell">
+                                                                            {member.classe && (classWeapons[member.classe] || defaultClassWeapons[member.classe]) ? (
+                                                                                <div className="weapon-icons-list">
+                                                                                    {(classWeapons[member.classe] || defaultClassWeapons[member.classe]).map((weapon, idx) => (
+                                                                                        <img 
+                                                                                            key={idx}
+                                                                                            src={weaponIcons[weapon]} 
+                                                                                            className="weapon-icon-small"
+                                                                                            alt={weapon}
+                                                                                            title={weapon}
+                                                                                        />
+                                                                                    ))}
+                                                                                </div>
+                                                                            ) : (
+                                                                                <span style={{color: 'var(--text-dim)', fontSize: '0.85rem'}}>-</span>
+                                                                            )}
+                                                                        </td>
+                                                                        <td className="team-cell">
+                                                                            <span className="team-badge">
+                                                                                #{member.teamId} {member.teamName}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            )}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
+                                </div>
+                                
+                                <div className="modal-actions">
+                                    <button className="modal-btn secondary" onClick={() => setShowMembersModal(false)}>
                                         Fechar
                                     </button>
                                 </div>
