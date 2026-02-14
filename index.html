@@ -11,6 +11,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
     <!-- html2canvas para captura de tela -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -67,7 +68,7 @@
         body {
             font-family: 'Rajdhani', sans-serif;
             background: var(--bg-darker);
-            color: var(--text);
+            color: #1a1a1a;
             overflow-x: hidden;
             line-height: 1.6;
         }
@@ -139,7 +140,7 @@
             padding: 8px 16px;
             background: rgba(240, 240, 240, 0.9);
             border: 1px solid var(--card-border);
-            color: var(--text);
+            color: #1a1a1a;
             font-family: 'Rajdhani', sans-serif;
             font-size: 0.85rem;
             font-weight: 600;
@@ -155,7 +156,7 @@
         .admin-btn:hover {
             background: var(--primary);
             color: var(--bg-darker);
-            border-color: var(--primary);
+            border-color: #4f46e5;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
@@ -272,7 +273,7 @@
         }
 
         .capture-footer p {
-            color: var(--text-dim);
+            color: #666;
             font-size: 0.9rem;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 0.05em;
@@ -290,7 +291,7 @@
             padding: 12px 24px;
             border: 2px solid var(--primary);
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
             font-family: 'Rajdhani', sans-serif;
             font-size: 1rem;
             font-weight: 600;
@@ -346,6 +347,57 @@
             0%, 100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.4); }
             50% { box-shadow: 0 0 0 10px rgba(255, 140, 0, 0); }
         }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Botões da HOME */
+        .home-btn {
+            padding: 14px 32px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: #4f46e5;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .home-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .home-btn:hover {
+            color: var(--bg-darker);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-btn:hover::before {
+            left: 0;
+        }
+
+        .home-btn:active {
+            transform: translateY(0);
+        }
 
         .modal-overlay {
             position: fixed;
@@ -382,27 +434,27 @@
         .modal-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .close-btn {
             background: none;
             border: none;
             font-size: 2rem;
-            color: var(--text-dim);
+            color: #666;
             cursor: pointer;
             transition: color 0.3s ease;
         }
 
         .close-btn:hover {
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .back-btn {
             padding: 8px 16px;
             background: transparent;
             border: 2px solid var(--primary);
-            color: var(--primary);
+            color: #4f46e5;
             font-family: 'Rajdhani', sans-serif;
             font-size: 0.9rem;
             font-weight: 600;
@@ -427,7 +479,7 @@
         .form-label {
             display: block;
             font-size: 0.9rem;
-            color: var(--text-dim);
+            color: #666;
             margin-bottom: 8px;
             font-weight: 600;
             text-transform: uppercase;
@@ -440,14 +492,14 @@
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 6px;
-            color: var(--text);
+            color: #1a1a1a;
             font-family: 'Rajdhani', sans-serif;
             font-size: 1rem;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
 
         .role-selector {
@@ -550,12 +602,12 @@
 
         .modal-btn:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .modal-btn.secondary {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .modal-btn.secondary:hover {
@@ -620,7 +672,7 @@
 
         .team-card:hover {
             transform: translateY(-8px);
-            border-color: var(--primary);
+            border-color: #4f46e5;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
         }
 
@@ -653,7 +705,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: #4f46e5;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             padding: 5px 10px;
@@ -758,7 +810,7 @@
 
         .member-item:hover {
             background: rgba(0, 0, 0, 0.05);
-            border-left-color: var(--primary);
+            border-left-color: #4f46e5;
         }
 
         .member-item:not(.editable):hover {
@@ -884,7 +936,7 @@
 
         .drag-handle {
             font-size: 1.2rem;
-            color: var(--text-dim);
+            color: #666;
             opacity: 0;
             transition: all 0.3s ease;
         }
@@ -895,7 +947,7 @@
         }
 
         .member-item.editable .drag-handle:hover {
-            color: var(--primary);
+            color: #4f46e5;
             transform: scale(1.2);
         }
 
@@ -912,7 +964,7 @@
         }
 
         footer p {
-            color: var(--text-dim);
+            color: #666;
             font-size: 0.9rem;
         }
 
@@ -932,7 +984,7 @@
 
         .info-banner p {
             font-size: 0.95rem;
-            color: var(--text-dim);
+            color: #666;
             margin: 0;
         }
 
@@ -942,7 +994,7 @@
         }
 
         .info-banner strong {
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .info-banner.edit-mode strong {
@@ -1069,14 +1121,14 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 4rem;
             font-weight: 900;
-            color: var(--primary);
+            color: #4f46e5;
             letter-spacing: 0.15em;
             margin-bottom: 15px;
         }
 
         .login-subtitle {
             font-size: 1rem;
-            color: var(--text-dim);
+            color: #666;
             margin-bottom: 40px;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -1103,7 +1155,7 @@
 
         .login-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
             background: rgba(255, 255, 255, 1);
         }
 
@@ -1135,7 +1187,7 @@
 
         .login-button:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
@@ -1154,7 +1206,7 @@
         .login-hint {
             margin-top: 20px;
             font-size: 0.85rem;
-            color: var(--text-dim);
+            color: #666;
             font-style: italic;
         }
 
@@ -1207,7 +1259,7 @@
         .change-password-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.3rem;
-            color: var(--primary);
+            color: #4f46e5;
             font-weight: 700;
         }
 
@@ -1215,13 +1267,13 @@
             background: none;
             border: none;
             font-size: 2rem;
-            color: var(--text-dim);
+            color: #666;
             cursor: pointer;
             transition: color 0.3s ease;
         }
 
         .change-password-close:hover {
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .change-password-form {
@@ -1239,7 +1291,7 @@
         .change-password-label {
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text);
+            color: #1a1a1a;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
@@ -1257,7 +1309,7 @@
 
         .change-password-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
             background: rgba(255, 255, 255, 1);
         }
 
@@ -1291,12 +1343,12 @@
 
         .change-password-btn:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .change-password-btn.secondary {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
         }
 
         .change-password-btn.secondary:hover {
@@ -1357,7 +1409,7 @@
         .feud-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.8rem;
-            color: var(--primary);
+            color: #4f46e5;
             font-weight: 900;
             letter-spacing: 0.1em;
         }
@@ -1366,7 +1418,7 @@
             background: none;
             border: none;
             font-size: 2.5rem;
-            color: var(--text-dim);
+            color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
             line-height: 1;
@@ -1408,7 +1460,7 @@
 
         .feud-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
 
         .feud-add-btn {
@@ -1427,7 +1479,7 @@
 
         .feud-add-btn:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
             transform: translateY(-2px);
         }
 
@@ -1450,14 +1502,14 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 2.5rem;
             font-weight: 900;
-            color: var(--primary);
+            color: #4f46e5;
             letter-spacing: 0.15em;
             margin-bottom: 5px;
         }
 
         .feud-export-subtitle {
             font-size: 0.9rem;
-            color: var(--text-dim);
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
@@ -1486,7 +1538,7 @@
         .feud-item-name {
             font-size: 1.2rem;
             font-weight: 600;
-            color: var(--text);
+            color: #1a1a1a;
             flex: 1;
         }
 
@@ -1494,7 +1546,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--primary);
+            color: #4f46e5;
             margin-right: 15px;
         }
 
@@ -1518,7 +1570,7 @@
         .feud-empty {
             text-align: center;
             padding: 40px;
-            color: var(--text-dim);
+            color: #666;
             font-style: italic;
         }
 
@@ -1545,7 +1597,7 @@
 
         .feud-action-btn:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
             transform: translateY(-2px);
         }
 
@@ -1593,7 +1645,7 @@
 
         .stats-title {
             font-size: 1rem;
-            color: var(--text);
+            color: #1a1a1a;
             margin-bottom: 12px;
             font-weight: 600;
             text-transform: uppercase;
@@ -1616,20 +1668,20 @@
         }
 
         .stat-item:hover {
-            border-color: var(--primary);
+            border-color: #4f46e5;
             transform: translateY(-2px);
         }
 
         .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--primary);
+            color: #4f46e5;
             font-family: 'Orbitron', sans-serif;
         }
 
         .stat-label {
             font-size: 0.85rem;
-            color: var(--text);
+            color: #1a1a1a;
             text-transform: uppercase;
             margin-top: 5px;
             opacity: 0.8;
@@ -1642,7 +1694,7 @@
 
         .filter-title {
             font-size: 1rem;
-            color: var(--text);
+            color: #1a1a1a;
             margin-bottom: 12px;
             font-weight: 600;
             text-transform: uppercase;
@@ -1658,7 +1710,7 @@
         .filter-btn {
             padding: 10px 20px;
             background: rgba(0, 0, 0, 0.3);
-            color: var(--text);
+            color: #1a1a1a;
             border: 2px solid var(--card-border);
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
@@ -1671,14 +1723,14 @@
         }
 
         .filter-btn:hover {
-            border-color: var(--primary);
+            border-color: #4f46e5;
             transform: translateY(-2px);
         }
 
         .filter-btn.active {
             background: var(--primary);
             color: var(--bg-darker);
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
 
         .filter-btn.active:hover {
@@ -1707,7 +1759,7 @@
         }
 
         .theme-toggle:hover {
-            border-color: var(--primary);
+            border-color: #4f46e5;
             transform: scale(1.05);
         }
 
@@ -1718,7 +1770,7 @@
         .theme-toggle-text {
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text);
+            color: #1a1a1a;
         }
 
         /* ========================================== */
@@ -1736,7 +1788,7 @@
             border: 2px solid var(--card-border);
             border-radius: 8px;
             padding: 12px;
-            color: var(--text);
+            color: #1a1a1a;
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             resize: vertical;
@@ -1744,7 +1796,7 @@
 
         .notes-textarea:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
 
         .presence-field {
@@ -1765,7 +1817,7 @@
 
         .presence-label {
             font-size: 1rem;
-            color: var(--text);
+            color: #1a1a1a;
             cursor: pointer;
             user-select: none;
         }
@@ -2060,25 +2112,25 @@
 
         .history-timestamp {
             font-size: 0.85rem;
-            color: var(--text-dim);
+            color: #666;
             margin-bottom: 5px;
         }
 
         .history-action {
             font-weight: 600;
-            color: var(--primary);
+            color: #4f46e5;
             margin-bottom: 3px;
         }
 
         .history-details {
             font-size: 0.9rem;
-            color: var(--text);
+            color: #1a1a1a;
         }
 
         .history-empty {
             text-align: center;
             padding: 40px;
-            color: var(--text-dim);
+            color: #666;
         }
 
         /* ========================================== */
@@ -2106,19 +2158,19 @@
 
         .backup-btn:hover {
             background: transparent;
-            color: var(--primary);
+            color: #4f46e5;
             transform: translateY(-2px);
         }
 
         .backup-btn.secondary {
             background: transparent;
-            color: var(--text);
+            color: #1a1a1a;
             border-color: var(--card-border);
         }
 
         .backup-btn.secondary:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            border-color: #4f46e5;
+            color: #4f46e5;
         }
 
         .backup-input {
@@ -2139,7 +2191,7 @@
         .option-btn {
             padding: 16px 20px;
             background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
+            color: #1a1a1a;
             border: 2px solid var(--card-border);
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
@@ -2155,7 +2207,7 @@
 
         .option-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
+            border-color: #4f46e5;
             transform: translateX(5px);
         }
 
@@ -2196,7 +2248,7 @@
 
         .class-item-label {
             font-size: 0.85rem;
-            color: var(--text-dim);
+            color: #666;
             font-weight: 600;
         }
 
@@ -2206,7 +2258,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--card-border);
             border-radius: 6px;
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 0.95rem;
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
@@ -2214,7 +2266,7 @@
 
         .class-item-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
             background: rgba(255, 255, 255, 0.08);
         }
         
@@ -2233,7 +2285,7 @@
         
         .weapon-label {
             font-size: 0.75rem;
-            color: var(--text-dim);
+            color: #666;
             font-weight: 500;
         }
         
@@ -2243,7 +2295,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--card-border);
             border-radius: 4px;
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 0.8rem;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
@@ -2252,7 +2304,7 @@
         
         .weapon-select:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
         
         .weapon-select:hover {
@@ -2329,7 +2381,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--card-border);
             border-radius: 8px;
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 1rem;
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
@@ -2337,12 +2389,12 @@
 
         .search-input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
             background: rgba(255, 255, 255, 0.08);
         }
 
         .search-input::placeholder {
-            color: var(--text-dim);
+            color: #666;
         }
 
         .members-filter-row {
@@ -2357,7 +2409,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid var(--card-border);
             border-radius: 6px;
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 0.95rem;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
@@ -2366,7 +2418,7 @@
 
         .filter-select:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #4f46e5;
         }
 
         .filter-select:hover {
@@ -2376,7 +2428,7 @@
         .filter-select option,
         .filter-select optgroup {
             background: var(--bg-darker);
-            color: var(--text);
+            color: #1a1a1a;
         }
 
         .leader-filter-checkbox {
@@ -2405,7 +2457,7 @@
         }
 
         .leader-filter-checkbox span {
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 0.95rem;
             font-weight: 600;
         }
@@ -2434,12 +2486,12 @@
             background: rgba(var(--primary-rgb), 0.1);
             border-left: 4px solid var(--primary);
             border-radius: 4px;
-            color: var(--text);
+            color: #1a1a1a;
             font-size: 0.95rem;
         }
 
         .members-count strong {
-            color: var(--primary);
+            color: #4f46e5;
             font-weight: 700;
         }
 
@@ -2468,7 +2520,7 @@
             padding: 15px 12px;
             text-align: left;
             font-weight: 700;
-            color: var(--primary);
+            color: #4f46e5;
             border-bottom: 2px solid var(--card-border);
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -2478,7 +2530,7 @@
         .members-table td {
             padding: 12px;
             border-bottom: 1px solid var(--card-border);
-            color: var(--text);
+            color: #1a1a1a;
         }
 
         .members-table tbody tr {
@@ -2574,7 +2626,7 @@
 
         .team-cell {
             font-size: 0.85rem;
-            color: var(--text-dim);
+            color: #666;
         }
 
         .team-badge {
@@ -2614,7 +2666,7 @@
         .customize-header {
             font-size: 1rem;
             font-weight: 700;
-            color: var(--primary);
+            color: #4f46e5;
             margin: 15px 0 10px 0;
             padding-bottom: 5px;
             border-bottom: 2px solid var(--card-border);
@@ -2834,6 +2886,10 @@
             const [roleFilter, setRoleFilter] = useState('all'); // Filtro de roles: 'all', 'tank', 'dps', 'healer'
             const [showStatsModal, setShowStatsModal] = useState(false); // Controla modal de estatísticas/filtros
             const [darkMode, setDarkMode] = useState(true); // Controla tema claro/escuro (false = escuro, true = claro)
+            const [showHomeScreen, setShowHomeScreen] = useState(true); // Controla se mostra tela home - COMEÇA NA HOME
+            const [showPTPasswordModal, setShowPTPasswordModal] = useState(false); // Modal de senha para PT
+            const [ptPasswordInput, setPtPasswordInput] = useState(''); // Input da senha da PT
+            const [ptPasswordError, setPtPasswordError] = useState(''); // Erro de senha da PT
             const [history, setHistory] = useState([]); // Histórico de mudanças
             const [showHistoryModal, setShowHistoryModal] = useState(false); // Modal de histórico
             const [showBackupModal, setShowBackupModal] = useState(false); // Modal de backup
@@ -2847,6 +2903,14 @@
             const [showOnlyLeaders, setShowOnlyLeaders] = useState(false); // Filtro para mostrar apenas líderes
             const [showClassesChart, setShowClassesChart] = useState(false); // Controla exibição do gráfico de classes
             const [selectedClass, setSelectedClass] = useState(null); // Classe selecionada no gráfico
+            const [showDKPScreen, setShowDKPScreen] = useState(false); // Controla tela DKP
+            const [dkpData, setDkpData] = useState([]); // Dados DKP do Firebase
+            const [dkpLoading, setDkpLoading] = useState(true); // Loading DKP
+            const [dkpSearchQuery, setDkpSearchQuery] = useState(''); // Busca DKP
+            const [showHistoricoModal, setShowHistoricoModal] = useState(false); // Modal de histórico
+            const [historicoPlayer, setHistoricoPlayer] = useState(null); // Jogador selecionado
+            const [historicoData, setHistoricoData] = useState([]); // Dados do histórico
+            const [historicoLoading, setHistoricoLoading] = useState(false); // Loading histórico
             
             // Lista padrão de classes do Throne and Liberty (organizadas por role)
             const defaultClassNames = {
@@ -2884,6 +2948,10 @@
                 'Eradicator': 'Eradicator',
                 'Dark Tormentor': 'Dark Tormentor'
             };
+            
+            // ============================================================
+            // DADOS DOS EVENTOS DO THRONE AND LIBERTY
+            // ============================================================
             
             // ============================================================
             // SISTEMA DE ÍCONES DE ARMAS
@@ -3021,6 +3089,22 @@
                 setIsAuthenticated(false);
                 setPasswordInput('');
                 showNotification('🔒 Sessão encerrada');
+            };
+
+            // Validar senha da PT
+            const handlePTLogin = (e) => {
+                e.preventDefault();
+                
+                if (ptPasswordInput === senhaAcesso) {
+                    setShowPTPasswordModal(false);
+                    setShowHomeScreen(false); // Vai para PT
+                    setPtPasswordInput('');
+                    setPtPasswordError('');
+                    showNotification('✅ Acesso à PT autorizado!');
+                } else {
+                    setPtPasswordError('❌ Senha incorreta');
+                    setPtPasswordInput('');
+                }
             };
 
             const openChangePasswordModal = () => {
@@ -3529,6 +3613,104 @@
                 setTimeout(() => setNotification(null), 3000);
             };
 
+            // ========== FUNÇÕES DKP ==========
+            
+            // Carregar DKP do Firebase
+            const loadDKPFromFirebase = async () => {
+                setDkpLoading(true);
+                
+                try {
+                    // ID do servidor Discord (SUBSTITUA PELO SEU!)
+                    const GUILD_ID = '1305389371377057793'; // ID do seu servidor Discord
+                    
+                    const dkpRef = firebase.database().ref(`public/dkp/${GUILD_ID}`);
+                    
+                    dkpRef.on('value', (snapshot) => {
+                        const data = snapshot.val();
+                        
+                        if (data) {
+                            // Converter para array
+                            const dkpArray = Object.entries(data).map(([userId, dados]) => ({
+                                userId: userId,
+                                pontos: dados.pontos || 0,
+                                lastUpdate: dados.lastUpdate || new Date().toISOString(),
+                                // Prioridade: 1) Nome do Firebase, 2) Nome da PT, 3) Fallback
+                                nome: dados.nome || getNomeByDiscordId(userId) || `Jogador ${userId.slice(-4)}`
+                            }));
+                            
+                            // Ordenar por pontos (maior primeiro)
+                            dkpArray.sort((a, b) => b.pontos - a.pontos);
+                            
+                            setDkpData(dkpArray);
+                            setDkpLoading(false);
+                        } else {
+                            setDkpData([]);
+                            setDkpLoading(false);
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error('[DKP] Erro ao carregar:', error);
+                    setDkpLoading(false);
+                    showNotification('❌ Erro ao carregar DKP');
+                }
+            };
+            
+            // Função para carregar histórico de um jogador
+            const loadHistoricoPlayer = async (userId) => {
+                setHistoricoLoading(true);
+                
+                try {
+                    const GUILD_ID = '1305389371377057793';
+                    const historicoRef = firebase.database().ref(`public/dkp/${GUILD_ID}/${userId}/historico`);
+                    
+                    const snapshot = await historicoRef.once('value');
+                    const data = snapshot.val();
+                    
+                    console.log('[HISTORICO] Dados recebidos:', data);
+                    
+                    if (data && Array.isArray(data)) {
+                        // Ordenar por data (mais recente primeiro)
+                        const sorted = data.sort((a, b) => {
+                            // Converter data DD/MM/YYYY HH:MM para timestamp
+                            const parseDate = (dateStr) => {
+                                try {
+                                    const [datePart, timePart] = dateStr.split(' ');
+                                    const [day, month, year] = datePart.split('/');
+                                    const [hour, minute] = timePart.split(':');
+                                    return new Date(year, month - 1, day, hour, minute).getTime();
+                                } catch (e) {
+                                    return 0;
+                                }
+                            };
+                            return parseDate(b.data) - parseDate(a.data);
+                        });
+                        setHistoricoData(sorted);
+                    } else {
+                        setHistoricoData([]);
+                    }
+                    setHistoricoLoading(false);
+                } catch (error) {
+                    console.error('[HISTORICO] Erro ao carregar:', error);
+                    setHistoricoData([]);
+                    setHistoricoLoading(false);
+                }
+            };
+            
+            
+            // Função auxiliar para tentar pegar nome do Discord ID
+            const getNomeByDiscordId = (discordId) => {
+                // Procurar nos membros da PT se tem alguém com este ID
+                for (const team of teams) {
+                    for (const member of team.members) {
+                        if (member.discordId === discordId) {
+                            return member.name;
+                        }
+                    }
+                }
+                return null;
+            };
+
             const toggleEditMode = () => {
                 setIsEditMode(!isEditMode);
                 if (!isEditMode) {
@@ -3822,8 +4004,8 @@
                         </div>
                     )}
 
-                    {/* TELA DE LOGIN */}
-                    <div className={`login-overlay ${isAuthenticated ? 'hidden' : ''}`}>
+                    {/* TELA DE LOGIN - ESCONDIDA */}
+                    <div className={`login-overlay ${isAuthenticated ? 'hidden' : ''}`} style={{display: 'none'}}>
                         <div className="login-box">
                             <h1 className="login-logo">RISE</h1>
                             <p className="login-subtitle">Guilda de Elite</p>
@@ -3851,8 +4033,726 @@
                         </div>
                     </div>
 
-                    {/* CONTEÚDO PRINCIPAL */}
-                    <div className="container">
+                    {/* TELA HOME */}
+                    <div className="container" style={{display: showHomeScreen ? 'block' : 'none', paddingTop: '120px', paddingBottom: '80px'}}>
+                        <div style={{maxWidth: '1100px', margin: '0 auto', padding: '0 40px'}}>
+                            
+                            {/* Header Minimalista */}
+                            <div style={{
+                                textAlign: 'center',
+                                marginBottom: '100px'
+                            }}>
+                                <h1 style={{
+                                    fontFamily: 'Orbitron',
+                                    fontSize: '6rem',
+                                    fontWeight: 300,
+                                    letterSpacing: '0.4em',
+                                    color: '#1a1a1a',
+                                    marginBottom: '30px'
+                                }}>
+                                    RISE
+                                </h1>
+                                <div style={{
+                                    fontSize: '1.1rem',
+                                    color: '#666',
+                                    letterSpacing: '0.3em',
+                                    fontWeight: 400
+                                }}>
+                                    GUILDA DE ELITE
+                                </div>
+                            </div>
+                            
+                            {/* Grid Horizontal de Cards */}
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, 1fr)',
+                                gap: '25px',
+                                maxWidth: '850px',
+                                margin: '0 auto'
+                            }}>
+                                {/* Card PT */}
+                                <div style={{
+                                    padding: '35px 30px',
+                                    background: 'transparent',
+                                    border: '1px solid var(--card-border)',
+                                    textAlign: 'center'
+                                }}>
+                                    <div style={{
+                                        fontSize: '1.4rem',
+                                        fontWeight: 600,
+                                        color: '#1a1a1a',
+                                        marginBottom: '12px',
+                                        letterSpacing: '0.08em'
+                                    }}>
+                                        PARTY TIMES
+                                    </div>
+                                    <div style={{
+                                        fontSize: '0.95rem',
+                                        color: '#666',
+                                        fontWeight: 400,
+                                        lineHeight: '1.6',
+                                        marginBottom: '20px'
+                                    }}>
+                                        Gerenciar times e composições
+                                    </div>
+                                    <button 
+                                        className="home-btn"
+                                        onClick={() => setShowPTPasswordModal(true)}
+                                    >
+                                        Acessar
+                                    </button>
+                                </div>
+
+                                {/* Card DKP */}
+                                {/* Card DKP - ATIVO */}
+                                <div style={{
+                                    padding: '35px 30px',
+                                    background: 'transparent',
+                                    border: '1px solid var(--card-border)',
+                                    textAlign: 'center'
+                                }}>
+                                    <div style={{
+                                        fontSize: '1.4rem',
+                                        fontWeight: 600,
+                                        color: '#1a1a1a',
+                                        marginBottom: '12px',
+                                        letterSpacing: '0.08em'
+                                    }}>
+                                        SISTEMA DKP
+                                    </div>
+                                    <div style={{
+                                        fontSize: '0.95rem',
+                                        color: '#666',
+                                        fontWeight: 400,
+                                        marginBottom: '20px'
+                                    }}>
+                                        Pontos e ranking da guilda
+                                    </div>
+                                    <button 
+                                        className="home-btn"
+                                        onClick={() => {
+                                            setShowHomeScreen(false);
+                                            setShowDKPScreen(true);
+                                            loadDKPFromFirebase();
+                                        }}
+                                    >
+                                        Ver Ranking
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* MODAL DE SENHA PARA PT */}
+                    {showPTPasswordModal && (
+                        <div className="modal-overlay" onClick={() => setShowPTPasswordModal(false)}>
+                            <div className="modal" style={{maxWidth: '450px'}} onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2 className="modal-title">🔒 Acesso à PT</h2>
+                                    <button className="close-btn" onClick={() => setShowPTPasswordModal(false)}>×</button>
+                                </div>
+                                
+                                <form onSubmit={handlePTLogin} style={{padding: '20px'}}>
+                                    <div className="form-group">
+                                        <label className="form-label">Digite a senha de acesso:</label>
+                                        <input 
+                                            type="password"
+                                            className="form-input"
+                                            placeholder="Senha da PT"
+                                            value={ptPasswordInput}
+                                            onChange={(e) => setPtPasswordInput(e.target.value)}
+                                            autoFocus
+                                            style={{
+                                                fontSize: '1.1rem',
+                                                padding: '15px',
+                                                textAlign: 'center'
+                                            }}
+                                        />
+                                        
+                                        {ptPasswordError && (
+                                            <div style={{
+                                                color: '#ff4444',
+                                                marginTop: '10px',
+                                                textAlign: 'center',
+                                                fontSize: '0.95rem',
+                                                fontWeight: '600'
+                                            }}>
+                                                {ptPasswordError}
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="modal-actions" style={{marginTop: '25px'}}>
+                                        <button type="submit" className="modal-btn primary">
+                                            🔓 Entrar na PT
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className="modal-btn secondary" 
+                                            onClick={() => {
+                                                setShowPTPasswordModal(false);
+                                                setPtPasswordInput('');
+                                                setPtPasswordError('');
+                                            }}
+                                        >
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* TELA DKP */}
+                    {showDKPScreen && (
+                        <div className="container" style={{paddingTop: '80px', paddingBottom: '80px'}}>
+                            <div style={{maxWidth: '1200px', margin: '0 auto', padding: '0 30px'}}>
+                                
+                                {/* Header */}
+                                <div style={{textAlign: 'center', marginBottom: '60px'}}>
+                                    <h1 style={{
+                                        fontFamily: 'Orbitron',
+                                        fontSize: '3rem',
+                                        fontWeight: 300,
+                                        letterSpacing: '0.2em',
+                                        color: '#1a1a1a',
+                                        marginBottom: '15px'
+                                    }}>
+                                        RANKING DKP
+                                    </h1>
+                                    <p style={{
+                                        fontSize: '1rem',
+                                        color: '#666',
+                                        letterSpacing: '0.1em'
+                                    }}>
+                                        Ranking de pontos da guilda
+                                    </p>
+                                </div>
+                                
+                                {/* Barra de Ações */}
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: '30px',
+                                    gap: '20px',
+                                    flexWrap: 'wrap'
+                                }}>
+                                    {/* Busca */}
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar jogador..."
+                                        value={dkpSearchQuery}
+                                        onChange={(e) => setDkpSearchQuery(e.target.value)}
+                                        style={{
+                                            flex: 1,
+                                            minWidth: '200px',
+                                            padding: '12px 20px',
+                                            border: '1px solid var(--card-border)',
+                                            background: 'transparent',
+                                            color: '#1a1a1a',
+                                            borderRadius: '6px',
+                                            fontSize: '0.95rem'
+                                        }}
+                                    />
+                                    
+                                    {/* Botão Voltar */}
+                                    <button
+                                        className="home-btn"
+                                        onClick={() => {
+                                            setShowDKPScreen(false);
+                                            setShowHomeScreen(true);
+                                        }}
+                                    >
+                                        ← Voltar
+                                    </button>
+                                </div>
+                                
+                                {/* Loading */}
+                                {dkpLoading && (
+                                    <div style={{textAlign: 'center', padding: '100px 0'}}>
+                                        <div style={{fontSize: '3rem', marginBottom: '20px'}}>⏳</div>
+                                        <p style={{fontSize: '1.2rem', color: '#666'}}>
+                                            Carregando dados do Discord...
+                                        </p>
+                                    </div>
+                                )}
+                                
+                                {/* Tabela de Ranking */}
+                                {!dkpLoading && dkpData.length > 0 && (
+                                    <div style={{
+                                        background: 'var(--card-bg)',
+                                        border: '1px solid var(--card-border)',
+                                        borderRadius: '8px',
+                                        overflow: 'hidden'
+                                    }}>
+                                        {/* Header da Tabela */}
+                                        <div style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: '80px 1fr 150px',
+                                            padding: '20px 25px',
+                                            background: 'rgba(255, 255, 255, 0.02)',
+                                            borderBottom: '1px solid var(--card-border)',
+                                            fontWeight: 600,
+                                            fontSize: '0.9rem',
+                                            letterSpacing: '0.1em',
+                                            color: '#666'
+                                        }}>
+                                            <div style={{textAlign: 'center'}}>#</div>
+                                            <div>JOGADOR</div>
+                                            <div style={{textAlign: 'right'}}>PONTOS</div>
+                                        </div>
+                                        
+                                        {/* Linhas da Tabela */}
+                                        {dkpData
+                                            .filter(player => 
+                                                player.nome.toLowerCase().includes(dkpSearchQuery.toLowerCase()) ||
+                                                player.userId.includes(dkpSearchQuery)
+                                            )
+                                            .map((player, index) => (
+                                                <div
+                                                    key={player.userId}
+                                                    style={{
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '80px 1fr 150px',
+                                                        padding: '18px 25px',
+                                                        borderBottom: index < dkpData.length - 1 ? '1px solid var(--card-border)' : 'none',
+                                                        transition: 'all 0.2s ease',
+                                                        background: index < 3 ? 'rgba(229, 229, 229, 0.03)' : 'transparent'
+                                                    }}
+                                                    onMouseOver={(e) => {
+                                                        e.currentTarget.style.background = 'rgba(229, 229, 229, 0.05)';
+                                                    }}
+                                                    onMouseOut={(e) => {
+                                                        e.currentTarget.style.background = index < 3 ? 'rgba(229, 229, 229, 0.03)' : 'transparent';
+                                                    }}
+                                                >
+                                                    {/* Posição */}
+                                                    <div style={{
+                                                        textAlign: 'center',
+                                                        fontSize: '1.1rem',
+                                                        fontWeight: 600,
+                                                        color: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : index === 2 ? '#CD7F32' : 'var(--text-dim)'
+                                                    }}>
+                                                        #{index + 1}
+                                                    </div>
+                                                    
+                                                    {/* Nome */}
+                                                    <div 
+                                                        style={{
+                                                            fontSize: '1rem',
+                                                            color: '#1a1a1a',
+                                                            fontWeight: index < 3 ? 600 : 400,
+                                                            cursor: 'pointer',
+                                                            transition: 'color 0.2s ease'
+                                                        }}
+                                                        onClick={() => {
+                                                            setHistoricoPlayer(player);
+                                                            setShowHistoricoModal(true);
+                                                            loadHistoricoPlayer(player.userId);
+                                                        }}
+                                                        onMouseOver={(e) => {
+                                                            e.target.style.color = '#818cf8';
+                                                        }}
+                                                        onMouseOut={(e) => {
+                                                            e.target.style.color = 'var(--text)';
+                                                        }}
+                                                    >
+                                                        {player.nome}
+                                                    </div>
+                                                    
+                                                    {/* Pontos */}
+                                                    <div style={{
+                                                        textAlign: 'right',
+                                                        fontSize: '1.1rem',
+                                                        fontWeight: 600,
+                                                        color: '#4f46e5'
+                                                    }}>
+                                                        {player.pontos.toLocaleString()} pts
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                )}
+                                
+                                {/* Vazio */}
+                                {!dkpLoading && dkpData.length === 0 && (
+                                    <div style={{textAlign: 'center', padding: '100px 0'}}>
+                                        <p style={{fontSize: '1.2rem', color: '#666', marginBottom: '10px'}}>
+                                            Nenhum dado de DKP encontrado
+                                        </p>
+                                        <p style={{fontSize: '0.9rem', color: '#666'}}>
+                                            Configure o bot do Discord para sincronizar os dados
+                                        </p>
+                                    </div>
+                                )}
+                                
+                                {/* Estatísticas */}
+                                {!dkpLoading && dkpData.length > 0 && (
+                                    <div style={{
+                                        marginTop: '40px',
+                                        padding: '25px',
+                                        background: 'rgba(255, 255, 255, 0.02)',
+                                        border: '1px solid var(--card-border)',
+                                        borderRadius: '8px',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                            gap: '30px'
+                                        }}>
+                                            <div>
+                                                <div style={{fontSize: '2rem', fontWeight: 600, color: '#4f46e5', marginBottom: '5px'}}>
+                                                    {dkpData.length}
+                                                </div>
+                                                <div style={{fontSize: '0.85rem', color: '#666', letterSpacing: '0.1em'}}>
+                                                    JOGADORES
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div style={{fontSize: '2rem', fontWeight: 600, color: '#4f46e5', marginBottom: '5px'}}>
+                                                    {dkpData.reduce((sum, p) => sum + p.pontos, 0).toLocaleString()}
+                                                </div>
+                                                <div style={{fontSize: '0.85rem', color: '#666', letterSpacing: '0.1em'}}>
+                                                    PONTOS TOTAIS
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div style={{fontSize: '2rem', fontWeight: 600, color: '#4f46e5', marginBottom: '5px'}}>
+                                                    {Math.round(dkpData.reduce((sum, p) => sum + p.pontos, 0) / dkpData.length)}
+                                                </div>
+                                                <div style={{fontSize: '0.85rem', color: '#666', letterSpacing: '0.1em'}}>
+                                                    MÉDIA POR JOGADOR
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* ============================================================ */}
+                    {/* MODAL DE HISTÓRICO */}
+                    {showHistoricoModal && historicoPlayer && (
+                        <div style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            backdropFilter: 'blur(4px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 10000,
+                            padding: '20px'
+                        }} onClick={() => setShowHistoricoModal(false)}>
+                            <div style={{
+                                background: '#ffffff',
+                                border: '2px solid rgba(0, 0, 0, 0.1)',
+                                borderRadius: '20px',
+                                padding: '36px',
+                                maxWidth: '650px',
+                                width: '100%',
+                                maxHeight: '85vh',
+                                overflow: 'auto',
+                                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                            }} onClick={(e) => e.stopPropagation()}>
+                                
+                                {/* Header */}
+                                <div style={{
+                                    marginBottom: '28px',
+                                    paddingBottom: '20px',
+                                    borderBottom: '2px solid rgba(0, 0, 0, 0.1)',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
+                                }}>
+                                    <div>
+                                        <div style={{
+                                            display: 'inline-block',
+                                            padding: '4px 14px',
+                                            background: 'rgba(0, 0, 0, 0.05)',
+                                            border: '1px solid rgba(0, 0, 0, 0.1)',
+                                            borderRadius: '20px',
+                                            marginBottom: '12px'
+                                        }}>
+                                            <span style={{
+                                                fontSize: '0.7rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '0.1em',
+                                                color: '#4f46e5',
+                                                textTransform: 'uppercase'
+                                            }}>Histórico de Participação</span>
+                                        </div>
+                                        <h2 style={{
+                                            fontFamily: 'Orbitron',
+                                            fontSize: '1.6rem',
+                                            fontWeight: 700,
+                                            color: '#1a1a1a',
+                                            marginBottom: '0',
+                                            lineHeight: 1.2
+                                        }}>
+                                            {historicoPlayer.nome}
+                                        </h2>
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowHistoricoModal(false)}
+                                        style={{
+                                            background: 'rgba(0, 0, 0, 0.05)',
+                                            border: '1px solid rgba(0, 0, 0, 0.1)',
+                                            borderRadius: '8px',
+                                            color: '#666',
+                                            fontSize: '1.3rem',
+                                            cursor: 'pointer',
+                                            padding: '8px 12px',
+                                            lineHeight: 1,
+                                            transition: 'all 0.2s ease',
+                                            fontWeight: 300
+                                        }}
+                                        onMouseOver={(e) => {
+                                            e.target.style.background = 'rgba(239, 68, 68, 0.1)';
+                                            e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                                            e.target.style.color = '#fca5a5';
+                                        }}
+                                        onMouseOut={(e) => {
+                                            e.target.style.background = 'rgba(255, 255, 255, 0.08)';
+                                            e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                                            e.target.style.color = '#e5e7eb';
+                                        }}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                
+                                {/* Stats */}
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(2, 1fr)',
+                                    gap: '16px',
+                                    marginBottom: '32px'
+                                }}>
+                                    <div style={{
+                                        padding: '24px 20px',
+                                        background: 'rgba(79, 70, 229, 0.05)',
+                                        border: '2px solid rgba(79, 70, 229, 0.2)',
+                                        borderRadius: '16px',
+                                        textAlign: 'center',
+                                        transition: 'all 0.3s ease',
+                                        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-4px)';
+                                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.3)';
+                                        e.currentTarget.style.borderColor = 'rgba(79, 70, 229, 0.2)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                                        e.currentTarget.style.borderColor = 'rgba(79, 70, 229, 0.15)';
+                                    }}>
+                                        <div style={{
+                                            fontSize: '2.2rem',
+                                            fontWeight: 800,
+                                            color: '#4f46e5',
+                                            fontFamily: 'Orbitron',
+                                            marginBottom: '8px',
+                                            lineHeight: 1
+                                        }}>
+                                            {historicoPlayer.pontos}
+                                        </div>
+                                        <div style={{fontSize: '0.75rem', color: '#666', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600}}>
+                                            Pontos Totais
+                                        </div>
+                                    </div>
+                                    <div style={{
+                                        padding: '24px 20px',
+                                        background: 'rgba(79, 70, 229, 0.05)',
+                                        border: '2px solid rgba(79, 70, 229, 0.2)',
+                                        borderRadius: '16px',
+                                        textAlign: 'center',
+                                        transition: 'all 0.3s ease',
+                                        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-4px)';
+                                        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.3)';
+                                        e.currentTarget.style.borderColor = 'rgba(79, 70, 229, 0.2)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                                        e.currentTarget.style.borderColor = 'rgba(79, 70, 229, 0.15)';
+                                    }}>
+                                        <div style={{
+                                            fontSize: '2.2rem',
+                                            fontWeight: 800,
+                                            color: '#4f46e5',
+                                            fontFamily: 'Orbitron',
+                                            marginBottom: '8px',
+                                            lineHeight: 1
+                                        }}>
+                                            {historicoData.length}
+                                        </div>
+                                        <div style={{fontSize: '0.75rem', color: '#666', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 600}}>
+                                            Participações
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Loading */}
+                                {historicoLoading && (
+                                    <div style={{textAlign: 'center', padding: '50px 20px'}}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '3px solid rgba(229, 229, 229, 0.1)',
+                                            borderTop: '3px solid var(--primary)',
+                                            borderRadius: '50%',
+                                            animation: 'spin 1s linear infinite',
+                                            margin: '0 auto 16px'
+                                        }}></div>
+                                        <div style={{fontSize: '0.95rem', color: '#666', fontWeight: 500}}>
+                                            Carregando histórico...
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* Lista de eventos */}
+                                {!historicoLoading && historicoData.length > 0 && (
+                                    <div>
+                                        <div style={{
+                                            fontSize: '0.75rem',
+                                            color: '#4f46e5',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.15em',
+                                            marginBottom: '20px',
+                                            fontWeight: 700,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px'
+                                        }}>
+                                            <div style={{
+                                                width: '4px',
+                                                height: '16px',
+                                                background: 'var(--primary)',
+                                                borderRadius: '2px'
+                                            }}></div>
+                                            Eventos Participados
+                                        </div>
+                                        <div style={{maxHeight: '420px', overflow: 'auto', paddingRight: '4px'}}>
+                                            {historicoData.map((evento, idx) => (
+                                                <div key={idx} style={{
+                                                    padding: '20px',
+                                                    background: 'rgba(79, 70, 229, 0.03)',
+                                                    border: '1.5px solid rgba(0, 0, 0, 0.1)',
+                                                    borderRadius: '14px',
+                                                    marginBottom: '14px',
+                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                    position: 'relative',
+                                                    overflow: 'hidden'
+                                                }} onMouseOver={(e) => {
+                                                    e.currentTarget.style.background = 'rgba(79, 70, 229, 0.08)';
+                                                    e.currentTarget.style.borderColor = 'rgba(229, 229, 229, 0.2)';
+                                                    e.currentTarget.style.transform = 'translateX(4px)';
+                                                }} onMouseOut={(e) => {
+                                                    e.currentTarget.style.background = 'rgba(229, 229, 229, 0.04)';
+                                                    e.currentTarget.style.borderColor = 'rgba(229, 229, 229, 0.12)';
+                                                    e.currentTarget.style.transform = 'translateX(0)';
+                                                }}>
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        left: 0,
+                                                        top: 0,
+                                                        bottom: 0,
+                                                        width: '4px',
+                                                        background: 'var(--primary)',
+                                                        borderRadius: '14px 0 0 14px'
+                                                    }}></div>
+                                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '10px'}}>
+                                                        <div style={{
+                                                            fontSize: '1.08rem',
+                                                            fontWeight: 700,
+                                                            color: '#1a1a1a',
+                                                            letterSpacing: '0.01em',
+                                                            flex: 1,
+                                                            paddingRight: '12px'
+                                                        }}>
+                                                            {evento.evento}
+                                                        </div>
+                                                        <div style={{
+                                                            padding: '6px 14px',
+                                                            background: 'rgba(79, 70, 229, 0.05)',
+                                                            border: '1.5px solid rgba(0, 0, 0, 0.1)',
+                                                            borderRadius: '20px',
+                                                            fontSize: '0.85rem',
+                                                            fontWeight: 800,
+                                                            color: '#4f46e5',
+                                                            fontFamily: 'Orbitron',
+                                                            letterSpacing: '0.02em',
+                                                            whiteSpace: 'nowrap',
+                                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                                                        }}>
+                                                            +{evento.pontos}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{
+                                                        fontSize: '0.85rem',
+                                                        color: '#666',
+                                                        fontWeight: 500,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '6px'
+                                                    }}>
+                                                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{opacity: 0.7}}>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        {evento.data}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* Vazio */}
+                                {!historicoLoading && historicoData.length === 0 && (
+                                    <div style={{textAlign: 'center', padding: '50px 20px'}}>
+                                        <div style={{
+                                            width: '80px',
+                                            height: '80px',
+                                            margin: '0 auto 20px',
+                                            borderRadius: '50%',
+                                            background: 'rgba(79, 70, 229, 0.05)',
+                                            border: '2px solid rgba(79, 70, 229, 0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <svg width="36" height="36" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </div>
+                                        <div style={{fontSize: '1rem', color: '#1a1a1a', marginBottom: '8px', fontWeight: 600}}>
+                                            Nenhuma participação registrada
+                                        </div>
+                                        <div style={{fontSize: '0.85rem', color: '#666', lineHeight: 1.5}}>
+                                            Este jogador ainda não participou de nenhum evento
+                                        </div>
+                                    </div>
+                                )}
+                                
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CONTEÚDO PRINCIPAL - PT */}
+                    <div className="container" style={{display: showHomeScreen || showDKPScreen ? 'none' : 'block'}}>
                         <div id="teams-capture">
                         <header>
                             <h1 className="logo">RISE</h1>
@@ -3877,7 +4777,7 @@
                                 <button className="action-btn" onClick={() => setShowOptionsModal(true)}>
                                     Opções
                                 </button>
-                                <button className="action-btn" onClick={handleLogout}>
+                                <button className="action-btn" onClick={() => setShowHomeScreen(true)}>
                                     Sair
                                 </button>
                             </div>
@@ -4108,7 +5008,7 @@
                                                 <option value="Dark Tormentor">{classNames['Dark Tormentor']}</option>
                                             </optgroup>
                                         </select>
-                                        <small style={{color: 'var(--text-dim)', fontSize: '0.85rem', marginTop: '5px', display: 'block'}}>
+                                        <small style={{color: '#666', fontSize: '0.85rem', marginTop: '5px', display: 'block'}}>
                                             Opcional - Selecione a classe do Throne and Liberty (personalize os nomes em Opções)
                                         </small>
                                     </div>
@@ -4440,10 +5340,10 @@
                                     {/* Gráfico de Classes (condicional) */}
                                     {showClassesChart && (
                                         <div className="chart-section" style={{marginBottom: '30px'}}>
-                                            <h3 style={{color: 'var(--primary)', marginBottom: '20px', fontSize: '1.2rem', textAlign: 'center'}}>
+                                            <h3 style={{color: '#4f46e5', marginBottom: '20px', fontSize: '1.2rem', textAlign: 'center'}}>
                                                 📊 Distribuição por Classe
                                             </h3>
-                                            <p style={{color: 'var(--text-dim)', textAlign: 'center', marginBottom: '15px', fontSize: '0.9rem'}}>
+                                            <p style={{color: '#666', textAlign: 'center', marginBottom: '15px', fontSize: '0.9rem'}}>
                                                 💡 Clique em uma barra para ver os membros dessa classe
                                             </p>
                                             <div style={{position: 'relative', height: '600px', maxHeight: '70vh'}}>
@@ -4461,7 +5361,7 @@
                                                 alignItems: 'center',
                                                 marginBottom: '15px'
                                             }}>
-                                                <h3 style={{color: 'var(--primary)', fontSize: '1.1rem'}}>
+                                                <h3 style={{color: '#4f46e5', fontSize: '1.1rem'}}>
                                                     Membros da classe: <strong>{classNames[selectedClass] || selectedClass}</strong>
                                                 </h3>
                                                 <button 
@@ -4496,7 +5396,7 @@
 
                                                     if (membersOfClass.length === 0) {
                                                         return (
-                                                            <p style={{textAlign: 'center', color: 'var(--text-dim)', padding: '20px'}}>
+                                                            <p style={{textAlign: 'center', color: '#666', padding: '20px'}}>
                                                                 Nenhum membro encontrado com essa classe
                                                             </p>
                                                         );
@@ -4520,7 +5420,7 @@
                                                                     }}
                                                                 >
                                                                     <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                                                                        <span style={{fontSize: '1rem', fontWeight: 600, color: 'var(--text)'}}>
+                                                                        <span style={{fontSize: '1rem', fontWeight: 600, color: '#1a1a1a'}}>
                                                                             {member.name}
                                                                             {member.isLeader && <span style={{marginLeft: '6px'}}>👑</span>}
                                                                         </span>
@@ -4547,7 +5447,7 @@
                                                                         )}
                                                                         <span style={{
                                                                             fontSize: '0.85rem',
-                                                                            color: 'var(--text-dim)',
+                                                                            color: '#666',
                                                                             padding: '4px 8px',
                                                                             background: 'rgba(255, 255, 255, 0.05)',
                                                                             borderRadius: '4px'
@@ -4560,7 +5460,7 @@
                                                             <p style={{
                                                                 textAlign: 'center',
                                                                 marginTop: '10px',
-                                                                color: 'var(--primary)',
+                                                                color: '#4f46e5',
                                                                 fontSize: '0.9rem',
                                                                 fontWeight: 600
                                                             }}>
@@ -4670,6 +5570,7 @@
                         </div>
                     )}
 
+                    {/* ============================================================ */}
                     {/* MODAL DE BACKUP */}
                     {showBackupModal && (
                         <div className="modal-overlay" onClick={() => setShowBackupModal(false)}>
@@ -4865,7 +5766,7 @@
                                 </div>
                                 
                                 <div style={{padding: '20px'}}>
-                                    <p style={{marginBottom: '15px', color: 'var(--text-dim)'}}>
+                                    <p style={{marginBottom: '15px', color: '#666'}}>
                                         Personalize os nomes e ícones de armas das classes do Throne and Liberty
                                     </p>
 
@@ -5303,7 +6204,7 @@
                                                         <tbody>
                                                             {filteredMembers.length === 0 ? (
                                                                 <tr>
-                                                                    <td colSpan="5" style={{textAlign: 'center', padding: '40px', color: 'var(--text-dim)'}}>
+                                                                    <td colSpan="5" style={{textAlign: 'center', padding: '40px', color: '#666'}}>
                                                                         Nenhum membro encontrado
                                                                     </td>
                                                                 </tr>
@@ -5320,7 +6221,7 @@
                                                                                     {classNames[member.classe] || member.classe}
                                                                                 </span>
                                                                             ) : (
-                                                                                <span style={{color: 'var(--text-dim)', fontSize: '0.85rem'}}>Sem classe</span>
+                                                                                <span style={{color: '#666', fontSize: '0.85rem'}}>Sem classe</span>
                                                                             )}
                                                                         </td>
                                                                         <td>
@@ -5345,7 +6246,7 @@
                                                                                     ))}
                                                                                 </div>
                                                                             ) : (
-                                                                                <span style={{color: 'var(--text-dim)', fontSize: '0.85rem'}}>-</span>
+                                                                                <span style={{color: '#666', fontSize: '0.85rem'}}>-</span>
                                                                             )}
                                                                         </td>
                                                                         <td className="team-cell">
